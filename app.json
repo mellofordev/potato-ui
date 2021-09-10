@@ -4,9 +4,9 @@
     "slug": "potato",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/potatoicon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/punfuelsplash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -20,11 +20,14 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.mello.potato",
+      "versionCode": 1,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/potatoicon.png",
         "backgroundColor": "#FFFFFF"
       }
     },
+    
     "web": {
       "favicon": "./assets/favicon.png"
     }

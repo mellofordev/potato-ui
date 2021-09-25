@@ -13,7 +13,7 @@ export default function Trending(){
           
           <Appbar.Content 
           title={<Searchbar placeholder='Search ' onChangeText={(q)=>{setUserInput(q)}} value={userinput} style={{marginBottom:3,borderRadius:10,width:300}}/>}  
-          titleStyle={{position:'relative',right:0,left:0}}
+          titleStyle={{position:'relative',right:0,left:6}}
           />
         </Appbar.Header>
         <View style={styles.container}>

@@ -58,6 +58,7 @@ const styles=StyleSheet.create({
         flexDirection:'column',
         justifyContent:'center',
         
+        
 
         
 
@@ -69,6 +70,7 @@ const styles=StyleSheet.create({
         flexDirection:'column',
         backgroundColor:'white',
         borderRadius:10,
+        elevation:0.5
         
         
 

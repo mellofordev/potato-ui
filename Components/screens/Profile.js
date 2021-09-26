@@ -1,55 +1,48 @@
-import React,{useRef} from 'react';
+import React,{useRef,useState,useEffect,useContext} from 'react';
 import {View,TouchableOpacity,Text} from 'react-native';
 import { Appbar,Divider } from 'react-native-paper';
 import ProfileCardComponent from '../ProfileCardComponent';
 import PostComponent from '../PostComponent';
 import { Modalize } from 'react-native-modalize';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from '../AuthContext';
 export default function Profile(){
-    const flatdata =[{id:1,name:'settings'},{id:2,name:'verify account'},{id:3,name:'deactivate'}]
-    const [data,setData]=React.useState([]);
-    const [dynamicsnaps,setDynamicSnaps]=React.useState(500);
+    const flatdata =[{id:1,name:'settings'},{id:2,name:'logout'},{id:3,name:'deactivate'}]
+    const [dynamicsnaps,setDynamicSnaps]=useState(500);
+    const {logout} =useContext(AuthContext)
+    var token='';
+    const getToken = async () => {
+        try {
+          const value = await AsyncStorage.getItem('token')
+          token=value;
+        } catch(e) {
+          console.log(e);
+        }
+        
+      }
     const renderComponent =({item})=>{
         
         return(
             <View style={{margin:8}}>
-                <TouchableOpacity style={{marginLeft:5}}>
+                <TouchableOpacity style={{marginLeft:5}} onPress={()=>logout()}>
                     <Text style={{fontSize:25,color:'grey'}}>{item.name}</Text>
                 </TouchableOpacity>
             </View>
         );
     }
-    var profile_pic_medium='';
-    var profile_name='';
-    var item=[];
+
     const modalizeRef = useRef(null);
     const onOpen=()=>{
         modalizeRef.current?.open()
     } 
-    const apireq =()=>{
-        fetch('https://randomuser.me/api/')
-        .then(response=>response.json())
-        .then(data=>{
-            
-            
-            profile_pic_medium=data.results[0].picture.medium;
-            profile_name=data.results[0].name.first;
-            item=[profile_pic_medium,profile_name];
-            setData(item);
-
-        }
-        )
-        .catch(error=>console.log(error))
-
-    }
-    React.useEffect(()=>{
-        apireq();
-    },[]);
+    useEffect(()=>{
+        getToken();
+    },[])
     return(
     <>    
     <View style={{flex:1}}>
         <Appbar.Header style={{backgroundColor:'#fff'}}>
-            <Appbar.Content title={data[1]}/>
+            <Appbar.Content title={'Your Profile'}/>
             <Appbar.Action icon='account-cog'  style={{right:1}} onPress={()=>{setDynamicSnaps(300); onOpen();}}/>
         </Appbar.Header>
         
@@ -58,7 +51,7 @@ export default function Profile(){
           topheader={()=>{
            return(
             <View style={{flex:1}}>   
-                <ProfileCardComponent item={data}/>
+                <ProfileCardComponent  item={token}/>
            </View>
             );
            }}
@@ -66,7 +59,7 @@ export default function Profile(){
         />
     
     </View>
-    <Modalize snapPoint={dynamicsnaps} modalHeight={500} ref={modalizeRef}
+    <Modalize snapPoint={300} modalHeight={500} ref={modalizeRef}
     HeaderComponent={
         <View>
             <Text style={{fontSize:20,textAlign:'center',marginTop:3}}>additional settings</Text>

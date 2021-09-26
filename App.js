@@ -17,15 +17,17 @@ const Stack =createStackNavigator();
 function App(){
   
   const [isloading,setIsLoading]=React.useState(true);
-  const [token,setToken]=React.useState('false');
+  const [token,setToken]=React.useState(null);
 
   const storeToken = async (value) => {
     try {
       await AsyncStorage.setItem('token', value)
+      setToken(true);
     } catch (e) {
       // saving error
     }
   }
+
   const getToken = async () => {
     try {
       const value = await AsyncStorage.getItem('token')
@@ -44,11 +46,11 @@ function App(){
   }
   React.useEffect(()=>{
     getToken();
-  },[])
+    
+  },[]);
   const context=React.useMemo(()=>({
-    login:(username)=>{
-      console.log('activated');
-      storeToken('true');
+    login:(get_token)=>{
+      storeToken(get_token);
       
 
     },
@@ -58,9 +60,7 @@ function App(){
     logout:()=>{
       removeToken();
     }
-  }));
-
-  
+  })); 
      return(
       <AuthContext.Provider value={context}>
       <NavigationContainer ref={navigationRef}>

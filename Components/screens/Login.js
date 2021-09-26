@@ -1,25 +1,20 @@
 
-import React,{useState,useContext}  from 'react';
+import React,{useState,useContext,useEffect}  from 'react';
 import {View,StyleSheet, Alert} from 'react-native';
-import {Button as RButton,Title,TextInput,Card}  from 'react-native-paper';
+import {Button as RButton,Title,TextInput,Card, ActivityIndicator}  from 'react-native-paper';
+import { set } from 'react-native-reanimated';
 import { AuthContext } from '../AuthContext';
-import * as SecureStore from 'expo-secure-store';
 
-async function save(key,value){
-    await SecureStore.setItemAsync(key,value);
-}
 function Login({navigation}){
     const {login} =useContext(AuthContext);
     const [username,setUsername]=useState(null);
     const [password,setPassword]=useState(null);
-    const [tokens,setToken]=useState('');
     const [loading,setLoading]=useState(false);
+   
     const apirequest =()=>{
         if(username==null || password==null){
             Alert.alert('Username and password is required');
-        }else if(username&&password==null){
-            Alert.alert("Are you dumb ?",
-            "username and password are required");
+            setLoading(false);
         }else{
             setLoading(true);
             fetch('https://punfuel.pythonanywhere.com/accounts/api/login/',{
@@ -34,22 +29,23 @@ function Login({navigation}){
             })
             .then((response)=>response.json())
             .then(token=>{
-                console.log(token.token);
-                setToken(token.token);
-                save('username',tokens);
-                login(username);
                 setLoading(false);
+                if(token.token){
+                    login(token.token);
+                }else{
+                    
+                    Alert.alert('Unable to login with provided credentials');
+                }
+                
+                
             })
             .catch(error=>{
-                Alert.alert(error);
+                Alert.alert('Network Error');
             })
             
         }
     }
-    if(loading==true){
-        Alert.alert("Heads up!",
-        "Hang on ,we are verifying your authenticity");
-    }
+
     return (
         <View style={styles.container}>
             <Card>
@@ -58,9 +54,16 @@ function Login({navigation}){
                     <View >
                         <TextInput style={styles.input} label="username" theme={{colors:{primary:'#7289DA',text:'#23272A'}}} mode='flat' value={username} onChangeText={username=>setUsername(username)} />
                         <TextInput style={styles.input} label="password" theme={{colors:{primary:'#7289DA',text:'#23272A'}}} mode='flat' value={password} onChangeText={password=>setPassword(password)} secureTextEntry={true}/>
+                        {loading==false?
                         <RButton style={{marginBottom:25,height:50,borderRadius:55,marginTop:15,elevation:0}} mode='contained' color='#7289DA' disabled={false}  onPress={()=>{apirequest()}}>
                             <Title style={{color:'white',fontStyle:'normal',textTransform:'none'}}>Login</Title>
+                        </RButton>:(
+                        <RButton style={{marginBottom:25,height:50,borderRadius:55,marginTop:15,elevation:0}} mode='contained' color='#7289DA' disabled={true}>
+                           <Title style={{color:'white',fontStyle:'normal',textTransform:'none'}}>
+                               Loading...
+                           </Title>
                         </RButton>
+                        )}
                     </View>
                 </Card.Content>
             </Card>

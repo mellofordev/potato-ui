@@ -6,8 +6,9 @@ import PostComponent from '../PostComponent';
 import { Modalize } from 'react-native-modalize';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../AuthContext';
+
 export default function Profile(){
-    const flatdata =[{id:1,name:'settings'},{id:2,name:'logout'},{id:3,name:'deactivate'}]
+    const flatdata =[{id:'1',name:'logout'}]
     const [dynamicsnaps,setDynamicSnaps]=useState(500);
     const {logout} =useContext(AuthContext)
     var token='';
@@ -15,6 +16,7 @@ export default function Profile(){
         try {
           const value = await AsyncStorage.getItem('token')
           token=value;
+          console.log(token);
         } catch(e) {
           console.log(e);
         }
@@ -37,6 +39,7 @@ export default function Profile(){
     } 
     useEffect(()=>{
         getToken();
+        
     },[])
     return(
     <>    
@@ -47,7 +50,7 @@ export default function Profile(){
         </Appbar.Header>
         
     
-        <PostComponent apiUrl='https://meme-api.herokuapp.com/gimme/' 
+        <PostComponent apiUrl='https://punfuel.pythonanywhere.com/api/home?limit=' 
           topheader={()=>{
            return(
             <View style={{flex:1}}>   
@@ -55,7 +58,8 @@ export default function Profile(){
            </View>
             );
            }}
-           issticky={0.1} 
+           issticky={0.1}
+           item={token} 
         />
     
     </View>
@@ -69,7 +73,7 @@ export default function Profile(){
     flatListProps={{
         data:flatdata,
         renderItem:renderComponent,
-        keyExtractor:(item) =>{item.id},
+        keyExtractor:(item) =>{item.id.toString()},
         showsVerticalScrollIndicator:false,
 
     }}

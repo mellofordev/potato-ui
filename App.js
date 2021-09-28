@@ -12,6 +12,8 @@ import StackComment from './Components/screens/StackComment';
 import { AuthContext } from './Components/AuthContext';
 import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import EditProfile from './Components/EditProfile';
+import FollowComponent from './Components/FollowComponent';
 const Stack =createStackNavigator();
 
 function App(){
@@ -74,6 +76,8 @@ function App(){
           <Stack.Screen name="MainComponent" component={MainComponent} options={{headerShown:false}}/>
           <Stack.Screen name="StackProfile" component={StackProfile} options={{headerShown:false}}/>
           <Stack.Screen name="StackComment" component={StackComment} />
+          <Stack.Screen name="EditProfile" component={EditProfile}/>
+          <Stack.Screen name="FollowComponent" component={FollowComponent}/>
         </Stack.Navigator>)}
     </NavigationContainer>
     </AuthContext.Provider>

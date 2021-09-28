@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react';
 import {View,Text, Image,  StyleSheet} from 'react-native';
 import { Card, Paragraph, Title,Button as RButton, ActivityIndicator } from 'react-native-paper';
-
+import * as RootNavigation from './RootNavigation';
 
 
 export default function ProfileCardComponent({item}){
@@ -24,8 +24,7 @@ export default function ProfileCardComponent({item}){
         })
         .then((response)=>response.json())
         .then(res=>{
-            //console.log(data,data.profile,data.profile.pic);
-            console.log(res,item);
+            
             setData(res.profile);
             
 
@@ -53,8 +52,8 @@ export default function ProfileCardComponent({item}){
                                 
                                 </View>
                                 <Paragraph>{data.bio}</Paragraph>
-                                <RButton style={{marginTop:5,marginLeft:3,height:'15%',width:'80%',borderRadius:15,elevation:0}} mode='contained' color='#7289DA'>
-                                    <Text style={{color:'white',fontStyle:'normal',textTransform:'capitalize',fontSize:20}}>Follow</Text>
+                                <RButton style={{marginTop:5,marginLeft:3,height:'15%',width:'80%',borderRadius:15,elevation:0}} mode='outlined' onPress={()=>RootNavigation.navigate('EditProfile')} >
+                                    <Text style={{color:'#7289DA',fontStyle:'normal',fontSize:20}}>Edit profile</Text>
                                 </RButton>
                                 <View style={styles.profilebox}>
                                     <View style={{marginLeft:7,flexDirection:'row'}}>

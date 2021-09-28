@@ -1,9 +1,9 @@
-import React,{useRef} from 'react';
+import React,{useRef,useEffect,useState} from 'react';
 import {View,StyleSheet,Image,Text,FlatList,} from 'react-native';
 import {Appbar,Card} from 'react-native-paper';
 import PostComponent from '../PostComponent';
 import { Modalize } from 'react-native-modalize';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const categories =[
     {
         id:1,
@@ -28,12 +28,25 @@ const categories =[
 ];
 
 export default function Home(){
+    const [token,setToken]=useState(null);
+    const getToken = async () => {
+        try {
+          const value = await AsyncStorage.getItem('token');
+          setToken(value);
+        } catch(e) {
+          console.log(e);
+        }
+        
+      }
     const modalizeRef = useRef(null);
+    //const [token,setToken]=useState(null);
+
     const onOpen=()=>{
         modalizeRef.current?.open()
     } 
-
-
+    useEffect(()=>{
+        getToken();
+    },[])
     return(
     <>
     <View>
@@ -47,7 +60,8 @@ export default function Home(){
          
 
           <View style={styles.container}>
-         <PostComponent apiUrl='https://meme-api.herokuapp.com/gimme/' 
+         {token!=null &&   
+         <PostComponent apiUrl='https://punfuel.pythonanywhere.com/api/home?limit=' 
          onOpen={onOpen}
          topheader={()=>{
                      return(
@@ -59,8 +73,10 @@ export default function Home(){
                                     renderItem={({item})=>{
                                         return(
                                         <View style={styles.CategoryButton}>
-                                            <Text style={{margin:5,fontSize:20,color:'#FCFCFC'}}>{item.category}</Text>
-                                        </View>);
+                                            <Text style={{margin:2,fontSize:20,color:'#FCFCFC'}}>{item.category}</Text>
+                                        </View>
+                                        
+                                        );
                                     }}
                                     horizontal={true}
                                     />
@@ -70,7 +86,8 @@ export default function Home(){
                         );
          }}
          issticky={[0]}
-         /> 
+         item={token}
+         />} 
          </View>  
         </View>
         
@@ -105,7 +122,7 @@ const styles=StyleSheet.create({
         
    }, 
    Category:{
-       margin:2,
+       margin:0,
        
    }, 
    CategoryButton:{
@@ -114,7 +131,7 @@ const styles=StyleSheet.create({
     backgroundColor:'#2C2F33',
     borderRadius:8,
     marginTop:5,
-    width:99,
+    width:100,
     marginLeft:8,
     marginBottom:5,
     elevation:4,

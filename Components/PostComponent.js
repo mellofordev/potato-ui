@@ -1,22 +1,44 @@
 import React,{useState,useEffect,useCallback } from 'react';
-import {View,Text,FlatList, ActivityIndicator, RefreshControl,Alert} from 'react-native';
+import {View,Text,FlatList, ActivityIndicator, RefreshControl,Alert,Image} from 'react-native';
 import PostCard from './PostCardComponent';
 import FooterComponent from './FooterComponent';
+import { Card,Button,Title } from 'react-native-paper';
+import FollowComponent from './FollowComponent';
 
-export default function PostComponent({apiUrl,topheader,issticky=0,onOpen}){
+export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item}){
     const [isLoading,setIsLoading]=useState(false);
     const [data,setData]=useState([]);
     const [error,setError]=useState();
     const [isRefreshing,setIsRefreshing]=useState(false);
     const [fetchcount,setfetchcount]=useState(10);
     const [url,setUrl]=useState(apiUrl+fetchcount);
-    
+    const [render,setRender]=useState([]);
+    const recieved_token=item;
     const apirequest =()=>{
         
-        fetch(url)
+        fetch(url,{
+            method:'GET',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json',
+                'Authorization':'Token '+item,
+
+
+            }
+
+        })
         .then((response)=>response.json())
         .then(data=>{
-            setData(data.memes);
+            //console.log(data.results.follow);
+            if(data.results.feed){
+                setData(data.results.feed);
+                setRender(data.results.follow);
+            }else{
+                
+                setData(data.follow);
+                console.log(data.follow);
+                
+            }
             setIsLoading(true);
 
         })
@@ -28,13 +50,19 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen}){
     }
     useEffect(()=>{
         apirequest();
-    },[])
+    },[]);
     const fetchmore = (url)=>{
         
-        fetch(url)
+        fetch(url,{
+            method:'GET',
+            header:{
+                'Content-Type':'application/json',
+                'Authorization':'Token '+item,
+            }
+        })
         .then(response =>response.json())
         .then((result =>{
-            setData([...data,...result.memes]);
+            setData([...data,...result.posts]);
         }))
         .catch((error)=>{console.log(error)})
     }
@@ -51,37 +79,40 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen}){
     },[])
     return(
         <View> 
-            {!isLoading ? <ActivityIndicator size={44} color='#7289DA' style={{marginTop:12}}/> :(
-            <FlatList
-                data={data}
-                
-                renderItem={({item})=><PostCard item={item} onOpen={onOpen}/>}
-                keyExtractor={(item,index)=>index.toString()}
-                ListFooterComponent={()=><FooterComponent/>}
-                refreshControl={
-                    <RefreshControl 
-                    enabled={true} 
-                    refreshing={isRefreshing}
-                    onRefresh={onRefresh}/>}
-
-                ListHeaderComponent={topheader()}
-                stickyHeaderIndices={[issticky]}
-                onEndReached={()=>{
+        {!isLoading ? <ActivityIndicator size={44} color='#7289DA' style={{marginTop:12}}/> :(
             
-                    setfetchcount(fetchcount+3); 
-                    setUrl(apiUrl+fetchcount);
-                    
-                    fetchmore(url);
-                
-                    
-                    
-                }}
-                
-                
-                
-            />
-            )}
+        <FlatList
+            data={data}
+            
+            renderItem={({item})=><PostCard item={item} onOpen={onOpen} token={recieved_token}/>}
+            keyExtractor={(item,index)=>index.toString()}
+            ListFooterComponent={()=><FooterComponent item={render}/>}
+            refreshControl={
+                <RefreshControl 
+                enabled={true} 
+                refreshing={isRefreshing}
+                onRefresh={onRefresh}/>}
 
-        </View>
+            ListHeaderComponent={topheader()}
+            ListEmptyComponent={()=><FollowComponent item={render}/>}
+            stickyHeaderIndices={[issticky]}
+            onEndReached={()=>{
+        
+                setfetchcount(fetchcount+3); 
+                setUrl(apiUrl+fetchcount);
+                
+                fetchmore(url);
+            
+                
+                
+            }}
+            
+            
+            
+        />
+        )}
+
+    </View>
     );
+
 }

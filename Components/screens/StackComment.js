@@ -1,27 +1,65 @@
 import React,{useState,useEffect,useRef} from 'react';
-import {View,StyleSheet,Text,Image,FlatList,Dimensions} from 'react-native';
+import {View,StyleSheet,Text,Image,FlatList,Dimensions,Alert} from 'react-native';
 import { ActivityIndicator,Button,TextInput } from 'react-native-paper';
 import { Modalize } from 'react-native-modalize';
-export default function StackComment(){
+export default function StackComment({route}){
     const [isloading,setIsLoading]=useState(false);
     const [error,setError]=useState();
     const [data,setData]=useState([]);
     const [text,setText]=useState('');
+    const [btn,setBtn]=useState(false);
     const modalizeRef = useRef(null);
     const onOpen=()=>{
         modalizeRef.current?.open()
     } 
     const get_width=Dimensions.get('window').width;
+    const val =route.params.id;
+    const token=route.params.t;
+    
     const apireq =()=>{
-        fetch('https://jsonplaceholder.typicode.com/comments')
+        fetch('https://punfuel.pythonanywhere.com/api/comment/view/'+val,{
+            method:'GET',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json',
+                'Authorization':'Token '+token
+            }
+        })
         .then(response=>response.json())
         .then(data=>{
-            setData(data); 
+            setData(data.comments); 
             setIsLoading(true);
 
             
         })
         .catch(error=>{setError(error)})
+    }
+    const postreq=()=>{
+        if(text==''){
+            Alert.alert('duh,write some comment');
+        }else{
+            setBtn(true);
+        }
+        fetch('https://punfuel.pythonanywhere.com/api/comment/'+val,{
+            method:'POST',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json',
+                'Authorization':'Token '+token,
+
+            },
+            body:JSON.stringify({
+                comment:text
+            })
+        })
+        .then(response=>response.json())
+        .then(data=>{
+            setBtn(false);
+            console.log(data);
+        })
+        .catch(error=>{
+            Alert.alert('Network error');
+        })
     }
     useEffect(()=>{apireq();},[])
     const FixedBottom =({children})=>{
@@ -52,7 +90,13 @@ export default function StackComment(){
         </View>);
          }}
         keyExtractor={(item,index)=>index.toString()}
-
+        ListEmptyComponent={()=>{
+            return(
+                <View>
+                    <Text style={{textAlign:'center'}}>Be the first to comment for this post</Text>
+                </View>    
+            );
+        }}
         />
         )}
         <FixedBottom>
@@ -66,7 +110,12 @@ export default function StackComment(){
                 <View style={{justifyContent:'center',alignItems:'center'}}>
                 <Text style={{fontSize:20,margin:2,fontFamily:'Roboto',fontWeight:'normal',color:'grey'}}>comment as user</Text>
                 </View>
-                <TextInput label='Write your comment' value={text} onChangeText={text=>setText(text)} right={<TextInput.Icon name='send'/>}/>
+                {btn==false ?
+                <TextInput label='Write your comment' value={text} onChangeText={text=>setText(text)} right={<TextInput.Icon name='send'/>}  onPress={()=>{postreq();}}/>
+                :(
+                <TextInput label='Write your comment' disabled={true} />
+                )   
+                }
                 <View style={{margin:5}}>
                     <Text style={{fontSize:16,color:'#23272A'}}>suggested comments</Text>
                 </View>

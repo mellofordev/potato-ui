@@ -1,8 +1,8 @@
 
-import React,{useState,useContext,useEffect}  from 'react';
+import React,{useState,useContext}  from 'react';
 import {View,StyleSheet, Alert} from 'react-native';
-import {Button as RButton,Title,TextInput,Card, ActivityIndicator}  from 'react-native-paper';
-import { set } from 'react-native-reanimated';
+import {Button as RButton,Title,TextInput,Card}  from 'react-native-paper';
+
 import { AuthContext } from '../AuthContext';
 
 function Login({navigation}){
@@ -41,6 +41,7 @@ function Login({navigation}){
             })
             .catch(error=>{
                 Alert.alert('Network Error');
+                setLoading(false);
             })
             
         }

@@ -17,7 +17,7 @@ export default function Trending(){
           />
         </Appbar.Header>
         <View style={styles.container}>
-        <PostComponent apiUrl={userinput} 
+        <PostComponent apiUrl={'https://punfuel.pythonanywhere.com/api/home?limit='} 
             topheader={()=>{
                 return(
                     <View>

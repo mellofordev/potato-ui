@@ -50,7 +50,7 @@ function Login({navigation}){
     return (
         <View style={styles.container}>
             <Card>
-                <Card.Cover source={{ uri: 'https://media-cldnry.s-nbcnews.com/image/upload/t_social_share_1024x768_scale,f_auto,q_auto:best/newscms/2021_17/3469025/210429-memes-nft-gold-rush-2-se-101p.jpg' }}/>
+                <Card.Cover source={{ uri: 'https://i.ibb.co/n0wm6Pt/come-join.png' }}/>
                 <Card.Content>
                     <View >
                         <TextInput style={styles.input} label="username" theme={{colors:{primary:'#7289DA',text:'#23272A'}}} mode='flat' value={username} onChangeText={username=>setUsername(username)} />

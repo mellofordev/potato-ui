@@ -1,8 +1,7 @@
 import React,{useState,useEffect,useCallback } from 'react';
-import {View,Text,FlatList, ActivityIndicator, RefreshControl,Alert,Image} from 'react-native';
+import {View,FlatList, ActivityIndicator, RefreshControl,Alert} from 'react-native';
 import PostCard from './PostCardComponent';
 import FooterComponent from './FooterComponent';
-import { Card,Button,Title } from 'react-native-paper';
 import FollowComponent from './FollowComponent';
 
 export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item}){
@@ -15,7 +14,7 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
     const [render,setRender]=useState([]);
     const recieved_token=item;
     const apirequest =()=>{
-        
+        console.log(url);
         fetch(url,{
             method:'GET',
             headers:{
@@ -29,7 +28,7 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
         })
         .then((response)=>response.json())
         .then(data=>{
-            //console.log(data.results.follow);
+            console.log(data.results);
             if(data.results.feed){
                 setData(data.results.feed);
                 setRender(data.results.follow);
@@ -44,6 +43,7 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
         })
         .catch(error=>{
             setError(error);
+            console.log(error);
             Alert.alert('Network error');
         })
         
@@ -51,6 +51,10 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
     useEffect(()=>{
         apirequest();
     },[]);
+    
+    /*const reRender=useCallback(()=>{
+        apirequest();
+    },[])*/
     const fetchmore = (url)=>{
         
         fetch(url,{
@@ -77,6 +81,7 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
         })
         apirequest();
     },[])
+    
     return(
         <View> 
         {!isLoading ? <ActivityIndicator size={44} color='#7289DA' style={{marginTop:12}}/> :(

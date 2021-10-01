@@ -1,7 +1,10 @@
-import React,{useState,useEffect,useRef} from 'react';
-import {View,StyleSheet,Text,Image,FlatList,Dimensions,Alert} from 'react-native';
-import { ActivityIndicator,Button,TextInput } from 'react-native-paper';
+import React,{useState,useEffect,useRef,useCallback} from 'react';
+import {View,StyleSheet,Text,Image,FlatList,Dimensions,Alert, TouchableOpacity} from 'react-native';
+import { ActivityIndicator,TextInput,Divider} from 'react-native-paper';
 import { Modalize } from 'react-native-modalize';
+import RButton from '../RButtonComponent';
+import { Feather } from '@expo/vector-icons';
+import FooterComponent from '../FooterComponent';
 export default function StackComment({route}){
     const [isloading,setIsLoading]=useState(false);
     const [error,setError]=useState();
@@ -27,7 +30,7 @@ export default function StackComment({route}){
         })
         .then(response=>response.json())
         .then(data=>{
-            setData(data.comments); 
+            setData(data.comment); 
             setIsLoading(true);
 
             
@@ -35,33 +38,44 @@ export default function StackComment({route}){
         .catch(error=>{setError(error)})
     }
     const postreq=()=>{
-        if(text==''){
-            Alert.alert('duh,write some comment');
-        }else{
-            setBtn(true);
-        }
-        fetch('https://punfuel.pythonanywhere.com/api/comment/'+val,{
+        console.log('pressed');
+        setBtn(true);
+        fetch('https://punfuel.pythonanywhere.com/api/comment/'+route.params.id+'/',{
             method:'POST',
             headers:{
-                'Accept':'application/json',
+                
                 'Content-Type':'application/json',
-                'Authorization':'Token '+token,
+                'Authorization':'Token '+route.params.t,
 
             },
             body:JSON.stringify({
-                comment:text
-            })
+                    comment:text
+                    
+                })
+            
         })
         .then(response=>response.json())
         .then(data=>{
             setBtn(false);
-            console.log(data);
+            Alert.alert(data.comments);
+            setText('');
+            wait(200).then(()=>{
+                reRender();
+            })
         })
         .catch(error=>{
             Alert.alert('Network error');
+            setBtn(false);
+            
         })
     }
     useEffect(()=>{apireq();},[])
+    const reRender=useCallback(()=>{
+        apireq();
+    },[])
+    const wait = (timeout) => {
+        return new Promise(resolve => setTimeout(resolve, timeout));
+    }
     const FixedBottom =({children})=>{
         return(
         <View style={{position:'absolute',bottom:10,right:0,left:0,marginBottom:16}}>
@@ -78,44 +92,72 @@ export default function StackComment({route}){
         return(
         <View style={styles.bottomsheetcontainer}>
             <View style={styles.box}>
-                <Image style={{marginRight:15,height:45,width:45,borderRadius:10}} source={{uri:'https://instamber.com/uploads/staticpage/imagepreview-10-f72578fe9f.png'}}/>
+                <Image style={{marginRight:15,height:45,width:45,borderRadius:10}} source={{uri:'https://punfuel.pythonanywhere.com/media/'+item.profile_pic}}/>
                 
-                <Text style={{marginRight:3,color:'#23272A',fontWeight:'900',fontFamily:'Roboto'}}>{(item.name).slice(0,10)+'...'}</Text>
+                <Text style={{marginRight:3,color:'#23272A',fontWeight:'900',fontFamily:'Roboto'}}>{(item.user).length>10 ?(item.user).slice(0,10)+'...':((item.user))}</Text>
+                {item.verified==true &&
                 <Image style={{width:16,height:16,marginTop:3,marginLeft:3}} source={{uri:'https://s3-us-west-2.amazonaws.com/s.cdpn.io/1211695/twitter_verified.png'}}/>
-                
+                }
             </View>
             <View style={{flexDirection:'column',marginLeft:55,top:-17}}>
-                    <Text style={{fontSize:16}}>{item.body}</Text>
+                    <Text style={{fontSize:16}}>{item.comment}</Text>
             </View>
         </View>);
          }}
         keyExtractor={(item,index)=>index.toString()}
         ListEmptyComponent={()=>{
             return(
-                <View>
-                    <Text style={{textAlign:'center'}}>Be the first to comment for this post</Text>
+                <View style={{justifyContent:'center',alignItems:'center',marginTop:30}}>
+                    
+                    <Text style={{textAlign:'center',fontSize:18}}>Be the first to comment for this post</Text>
                 </View>    
+            );
+        }}
+        ListFooterComponent={()=>{
+            return(
+            <FooterComponent item={data}/>
             );
         }}
         />
         )}
         <FixedBottom>
-            <View style={{backgroundColor:'#fff',height:30,width:'100%'}}>
-                <Button mode={'outlined'} color={'#5865F2'} style={{backgroundColor:'white',width:get_width,height:60}} onPress={()=>onOpen()}>Write your comment</Button>
+            <TouchableOpacity style={{marginRight:12}} onPress={()=>{onOpen()}}>
+            <View style={{height:30,width:'100%',marginBottom:24,margin:5}}>
+                <RButton title={'write your comment'}/>
             </View>
+            </TouchableOpacity>
         </FixedBottom>
         </View>
         <Modalize ref={modalizeRef} snapPoint={400} modalHeight={500}>
             <View style={{flexDirection:'column'}}>
                 <View style={{justifyContent:'center',alignItems:'center'}}>
                 <Text style={{fontSize:20,margin:2,fontFamily:'Roboto',fontWeight:'normal',color:'grey'}}>comment as user</Text>
+                <Divider/>
                 </View>
+                <View >
                 {btn==false ?
-                <TextInput label='Write your comment' value={text} onChangeText={text=>setText(text)} right={<TextInput.Icon name='send'/>}  onPress={()=>{postreq();}}/>
+                <View style={{flexDirection:'row'}}>
+                <TextInput label='Write your comment' value={text} onChangeText={text=>setText(text)} style={{width:'90%',color:'#fff',marginLeft:5}}/>
+                <TouchableOpacity style={{margin:5,justifyContent:'center',alignItems:'center'}} 
+                onPress={()=>{
+                    if(text==''){
+                        Alert.alert('Write your comment');
+                    }else{
+                        postreq();
+                    }
+                   
+                    }}>
+                    <Feather name="send" size={24} color="black" />
+                 </TouchableOpacity>   
+                </View>    
                 :(
-                <TextInput label='Write your comment' disabled={true} />
+                <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>    
+                <ActivityIndicator size={24}/>
+                <Text style={{fontSize:18}}>Posting</Text>
+                </View>
                 )   
                 }
+                </View>
                 <View style={{margin:5}}>
                     <Text style={{fontSize:16,color:'#23272A'}}>suggested comments</Text>
                 </View>

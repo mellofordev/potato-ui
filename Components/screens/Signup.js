@@ -1,29 +1,94 @@
-import React from 'react';
-import { View,StyleSheet} from 'react-native';
-import {Button as RButton,Title,TextInput,Card}  from 'react-native-paper';
+import React,{useState,useContext} from 'react';
+import { View,StyleSheet, Alert} from 'react-native';
+import {Button as RButton,Title,TextInput,Card,Text}  from 'react-native-paper';
+import {AuthContext} from '../AuthContext';
 
 function Signup({navigation}){
-    const [username,setUsername]=React.useState('');
-    const [email,setEmail]=React.useState('');
-    const [password,setPassword]=React.useState('');
-    const [change,setChange]=React.useState(false);
+    const {signup} =useContext(AuthContext);
+    const [username,setUsername]=useState(null);
+    const [email,setEmail]=useState(null);
+    const [password,setPassword]=useState(null);
+    const [loading,setLoading]=useState(false);
+    
+    const apireq =()=>{
+        setLoading(true);
+        if(username==null || email==null || password==null){
+            Alert.alert('username, email, password are required');
+            setLoading(false);
+        }else{
+            setLoading(true);
+            fetch('https://punfuel.pythonanywhere.com/accounts/api/signup/',{
+                method:'POST',
+                headers:{
+    
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    username:username,
+                    email:email,
+                    password:password,
+                    password2:password,
+                })
+            })
+            .then(response=>response.json())
+            .then(data=>{
+                setLoading(false);
+                if(data.token){
+                    console.log(data.token);
+                    signup(data.token);
+                    
+                }else if(data.error){
+                    Alert.alert('Ops!',data.error);
+                    setLoading(false);
+                }else{
+                    Alert.alert('Password!',data.password[0]);
+                    setLoading(false);
+                }
+            })
+            .catch(error=>{
+                console.log(error);
+                Alert.alert('Network error');
+                setLoading(false);
+            })
+        }
+    }
+    const FixedBottom =({children})=>{
+        return(
+        <View style={{position:'absolute',bottom:10,right:0,left:0,marginBottom:16,margin:5}}>
+            {children}
+        </View>);
+    }
     return(
         <View style={styles.container}>
+            <View>
+            <Text style={{marginLeft:10,fontSize:35,marginTop:7,fontWeight:'bold'}}>Create your account.</Text>
+            </View>
             <Card>
-                <Card.Cover source={{ uri: 'https://public-files.gumroad.com/variants/cfv3par6ajy1tk00pswige6wrfi5/baaca0eb0e33dc4f9d45910b8c86623f0144cea0fe0c2093c546d17d535752eb' }}/>
+                
                 <Card.Content>
-                    <View >
-                        <TextInput style={styles.input} label="username" theme={{colors:{primary:'#7289DA',text:'#23272A'}}} mode='flat' />
-                        <TextInput style={styles.input} label="email" theme={{colors:{primary:'#7289DA',text:'#23272A'}}} mode='flat' />
-                        <TextInput style={styles.input} label="password"  theme={{colors:{primary:'#7289DA',text:'#23272A'}}} mode='flat' secureTextEntry={true} />
-                        <TextInput style={styles.input} label="confim password" theme={{colors:{primary:'#7289DA',text:'#23272A'}}} mode='flat' secureTextEntry={true} />
-                        <RButton style={{marginBottom:25,height:50,borderRadius:55,marginTop:15,elevation:0}} mode='contained' color='#7289DA' >
+                    <View>
+                        <TextInput style={styles.input} label="username" theme={{colors:{primary:'#7289DA',text:'#23272A'}}} mode='flat' value={username} onChangeText={username=>setUsername(username)} />
+                        <TextInput style={styles.input} label="email" theme={{colors:{primary:'#7289DA',text:'#23272A'}}} mode='flat' value={email} onChangeText={email=>setEmail(email)} />
+                        <TextInput style={styles.input} label="password"  theme={{colors:{primary:'#7289DA',text:'#23272A'}}} mode='flat' value={password} onChangeText={password=>setPassword(password)} secureTextEntry={true} />
+                        
+                    </View>
+                    <View>
+                {loading==false ?
+                        <RButton style={{marginBottom:25,height:50,borderRadius:55,marginTop:15,elevation:0}} mode='contained' color='#7289DA' onPress={()=>{apireq()}} >
                             <Title style={{color:'white',fontStyle:'normal',textTransform:'none'}}>Signup</Title>
                         </RButton>
-                    </View>
+                        
+                         :(
+                        <RButton style={{marginBottom:25,height:50,borderRadius:55,marginTop:15,elevation:0}} mode='contained' color='#7289DA' disabled={true}>
+                            <Title style={{color:'white',fontStyle:'normal',textTransform:'none'}}>Loading...</Title>
+                        </RButton>
+                        )
+                }        
+                </View>
                 </Card.Content>
             </Card>
-           
+            
+            
             
         </View>
     );
@@ -33,9 +98,9 @@ const styles =StyleSheet.create({
     container:{
         
         flexDirection:'column',
-        justifyContent: 'center',
-        
-        
+        backgroundColor:'#fff',
+        height:'100%',
+        justifyContent:'flex-start',
 
     },
     input:{

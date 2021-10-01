@@ -1,28 +1,28 @@
 import React,{useRef,useEffect,useState} from 'react';
 import {View,StyleSheet,Image,Text,FlatList,} from 'react-native';
-import {Appbar,Card} from 'react-native-paper';
+import {Appbar,Card,Title} from 'react-native-paper';
 import PostComponent from '../PostComponent';
 import { Modalize } from 'react-native-modalize';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const categories =[
     {
         id:1,
-        category:'Ghost mode',
+        category:'11cbruh',
 
     },
     {
         id:2,
-        category:'Funny',
+        category:'Funny.me',
         
     },
     {
         id:3,
-        category:'Short videos',
+        category:'thisisjustforfunandpun',
         
     },
     {
         id:4,
-        category:'Awesome meme',
+        category:'kindcoolmemerhere',
         
     },
 ];
@@ -56,7 +56,7 @@ export default function Home(){
         </Appbar.Header>   
         
         
-        <View style={{height:'100%'}}>
+        <View style={{height:'100%',backgroundColor:'#FCFCFC'}}>
          
 
           <View style={styles.container}>
@@ -65,20 +65,23 @@ export default function Home(){
          onOpen={onOpen}
          topheader={()=>{
                      return(
-                        <View>
-                            
+                        <View style={{flexDirection:'column'}}>
+                                    <Title style={{marginLeft:5,}}>Find new people.</Title>
                                     <FlatList
                                     data={categories}
                                     keyExtractor={({id})=>id.toString()}
+                                    
                                     renderItem={({item})=>{
                                         return(
                                         <View style={styles.CategoryButton}>
-                                            <Text style={{margin:2,fontSize:20,color:'#FCFCFC'}}>{item.category}</Text>
+                                            <Image source={{uri:'https://punfuel.pythonanywhere.com/media/default.png/'}} style={{borderRadius:8,height:55,width:55}}/>
+                                            <Text style={{margin:2,fontSize:13,color:'#FCFCFC',textAlign:'center'}}>{item.category}</Text>
                                         </View>
                                         
                                         );
                                     }}
                                     horizontal={true}
+                                    showsHorizontalScrollIndicator={false}
                                     />
 
                         
@@ -127,11 +130,11 @@ const styles=StyleSheet.create({
    }, 
    CategoryButton:{
     height:55,
-    
+    flexDirection:'row',
     backgroundColor:'#2C2F33',
     borderRadius:8,
     marginTop:5,
-    width:100,
+    width:150,
     marginLeft:8,
     marginBottom:5,
     elevation:4,

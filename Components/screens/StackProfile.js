@@ -3,51 +3,34 @@ import {View} from 'react-native';
 import { Appbar } from 'react-native-paper';
 import ProfileCardComponent from '../ProfileCardComponent';
 import PostComponent from '../PostComponent';
-export default function StackProfile({navigation}){
-    const [data,setData]=React.useState([]);
-    var profile_pic_medium='';
-    var profile_name='';
-    var item=[];
-    const apireq =()=>{
-        fetch('https://randomuser.me/api/')
-        .then(response=>response.json())
-        .then(data=>{
-            
-            
-            profile_pic_medium=data.results[0].picture.medium;
-            profile_name=data.results[0].name.first;
-            item=[profile_pic_medium,profile_name];
-            setData(item);
-
-        }
-        )
-        .catch(error=>console.log(error))
-
-    }
-    React.useEffect(()=>{
-        apireq();
-    },[]);
+export default function StackProfile({navigation,route}){
+    
+    const user=route.params.username;
+    const token=route.params.t;
+    
     return(
         
     <View style={{flex:1}}>
         <Appbar.Header style={{backgroundColor:'#fff'}}>
-            <Appbar.BackAction onPress={()=>{navigation.goBack(null)}}/>
-            <Appbar.Content title={data[1]}/>
+            <Appbar.BackAction  onPress={()=>{navigation.goBack(null)}}/>
+            <Appbar.Content title={user}/>
         </Appbar.Header>
         
     
        
  
           
-        <PostComponent apiUrl='https://meme-api.herokuapp.com/gimme/' 
+        <PostComponent apiUrl='https://punfuel.pythonanywhere.com/api/home?limit=' 
           topheader={()=>{
            return(
             <View style={{flex:1}}>   
-                <ProfileCardComponent item={data}/>
+                <ProfileCardComponent item={token} url={'https://punfuel.pythonanywhere.com/accounts/api/profile/'+user+'/+'}/>
            </View>
             );
            }}
            issticky={0.1} 
+           token={token}
+           user={user}
         />
     
     </View>

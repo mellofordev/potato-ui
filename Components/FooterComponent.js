@@ -1,7 +1,7 @@
 import React from 'react';
 import {View,Image,Text} from 'react-native';
 export default function FooterComponent({item}){
-    console.log(item);
+    
     return(
     
         <View style={{height:350,marginTop:10,margin:5,backgroundColor:'#fff',borderRadius:15,elevation:3}}>

@@ -4,14 +4,15 @@ import { Card, Paragraph, Title,Button as RButton, ActivityIndicator } from 'rea
 import * as RootNavigation from './RootNavigation';
 
 
-export default function ProfileCardComponent({item}){
+export default function ProfileCardComponent({item,url='https://punfuel.pythonanywhere.com/accounts/profile/'}){
     const [data,setData]=useState([]);
     
     const [loading,setLoading]=useState(true);
-    
+    const recieved_url=url;
+    console.log(recieved_url);
     const apireq =()=>{
         
-        fetch('https://punfuel.pythonanywhere.com/accounts/profile/',{
+        fetch(recieved_url,{
             method:'GET',
             headers:{
                 'Accept':'application/json',

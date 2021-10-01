@@ -5,6 +5,7 @@ import * as RootNavigation from './RootNavigation';
 export default function PostCard({item,onOpen,token}){
 
     var uid=item.id;
+    var user=item.user;
     return(
 
     <View style={styles.container}>
@@ -12,7 +13,7 @@ export default function PostCard({item,onOpen,token}){
     <View style={styles.postContainer}>
         <View style={{margin:5}}>
             <View style={styles.postHeader}>
-                <TouchableOpacity onPress={()=>RootNavigation.navigate('StackProfile')}>
+                <TouchableOpacity onPress={()=>RootNavigation.navigate('StackProfile',{username:user,t:token})}>
                 <Image source={{uri:'https://punfuel.pythonanywhere.com'+item.user_profile_pic}} style={{borderRadius:15,height:55,width:55,borderColor:'#fffaf0',borderWidth:1}}  />
                 </TouchableOpacity>
                 <View style={styles.postNameContainer}>
@@ -60,8 +61,8 @@ const styles=StyleSheet.create({
         marginTop:10,
         flexDirection:'column',
         justifyContent:'center',
-        
-        
+        margin:3,
+        elevation:1
 
         
 

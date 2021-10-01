@@ -42,6 +42,7 @@ function App(){
   const removeToken = async () => {
     try {
       await AsyncStorage.removeItem('token');
+      setToken(null);
     } catch (e) {
       console.log(e);
     }
@@ -56,8 +57,8 @@ function App(){
       
 
     },
-    singup:()=>{
-      setToken(true);
+    signup:(get_tokens)=>{
+      storeToken(get_tokens);
     },
     logout:()=>{
       removeToken();

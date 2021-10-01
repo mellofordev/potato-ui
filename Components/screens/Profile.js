@@ -22,16 +22,7 @@ export default function Profile(){
         }
         
       }
-    const renderComponent =({item})=>{
-        
-        return(
-            <View style={{margin:8}}>
-                <TouchableOpacity style={{marginLeft:5}} onPress={()=>logout()}>
-                    <Text style={{fontSize:25,color:'grey'}}>{item.name}</Text>
-                </TouchableOpacity>
-            </View>
-        );
-    }
+
 
     const modalizeRef = useRef(null);
     const onOpen=()=>{
@@ -69,15 +60,29 @@ export default function Profile(){
             <Text style={{fontSize:20,textAlign:'center',marginTop:3}}>additional settings</Text>
             <Divider/>
         </View>
-    } 
-    flatListProps={{
-        data:flatdata,
-        renderItem:renderComponent,
-        keyExtractor:(item) =>{item.id.toString()},
-        showsVerticalScrollIndicator:false,
-
-    }}
-    />
+    }>
+        <View style={{flexDirection:'column'}}>
+        <View style={{margin:8}}>
+                <TouchableOpacity style={{marginLeft:5}} onPress={()=>logout()}>
+                    <Text style={{fontSize:25,color:'grey'}}>logout</Text>
+                </TouchableOpacity>
+                
+        </View>
+        <View style={{margin:8}}>
+                <TouchableOpacity style={{marginLeft:5}}>
+                    <Text style={{fontSize:25,color:'grey'}}>verify account</Text>
+                </TouchableOpacity>
+                
+        </View>
+        <View style={{margin:8}}>
+                <TouchableOpacity style={{marginLeft:5}}>
+                    <Text style={{fontSize:25,color:'red'}}>delete account</Text>
+                </TouchableOpacity>
+                
+        </View>
+        
+        </View>
+    </Modalize>
     </>
     );
 }

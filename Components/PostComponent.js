@@ -14,7 +14,7 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
     const [render,setRender]=useState([]);
     const recieved_token=item;
     const apirequest =()=>{
-        console.log(url);
+        
         fetch(url,{
             method:'GET',
             headers:{
@@ -26,9 +26,9 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
             }
 
         })
-        .then((response)=>response.json())
+        .then(response=>response.json())
         .then(data=>{
-            console.log(data.results);
+            console.log(data,item);
             if(data.results.feed){
                 setData(data.results.feed);
                 setRender(data.results.follow);
@@ -50,6 +50,7 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
     }
     useEffect(()=>{
         apirequest();
+        
     },[]);
     
     /*const reRender=useCallback(()=>{
@@ -66,7 +67,8 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
         })
         .then(response =>response.json())
         .then((result =>{
-            setData([...data,...result.posts]);
+            
+            setData([...data,...result.results.feed]);
         }))
         .catch((error)=>{console.log(error)})
     }
@@ -90,7 +92,7 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
             data={data}
             
             renderItem={({item})=><PostCard item={item} onOpen={onOpen} token={recieved_token}/>}
-            keyExtractor={(item,index)=>index.toString()}
+            keyExtractor={({item},index)=>index.toString()}
             ListFooterComponent={()=><FooterComponent item={render}/>}
             refreshControl={
                 <RefreshControl 

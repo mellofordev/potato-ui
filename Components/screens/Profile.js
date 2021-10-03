@@ -6,51 +6,35 @@ import PostComponent from '../PostComponent';
 import { Modalize } from 'react-native-modalize';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../AuthContext';
-
 export default function Profile(){
-    const flatdata =[{id:'1',name:'logout'}]
-    const [dynamicsnaps,setDynamicSnaps]=useState(500);
-    const {logout} =useContext(AuthContext)
-    var token='';
-    const getToken = async () => {
-        try {
-          const value = await AsyncStorage.getItem('token')
-          token=value;
-          console.log(token);
-        } catch(e) {
-          console.log(e);
-        }
-        
-      }
-
+    const {logout} =useContext(AuthContext);
+    const {gettoken}=useContext(AuthContext);  
+    console.log(gettoken());
 
     const modalizeRef = useRef(null);
     const onOpen=()=>{
         modalizeRef.current?.open()
-    } 
-    useEffect(()=>{
-        getToken();
-        
-    },[])
+    }
+
     return(
     <>    
-    <View style={{flex:1}}>
+    <View style={{flex:1,backgroundColor:'#FCFCFC'}}>
         <Appbar.Header style={{backgroundColor:'#fff'}}>
             <Appbar.Content title={'Your Profile'}/>
-            <Appbar.Action icon='account-cog'  style={{right:1}} onPress={()=>{setDynamicSnaps(300); onOpen();}}/>
+            <Appbar.Action icon='account-cog'  style={{right:1}} onPress={()=>{onOpen();}}/>
         </Appbar.Header>
         
     
-        <PostComponent apiUrl='https://punfuel.pythonanywhere.com/api/home?limit=' 
+        <PostComponent apiUrl='https://punfuel.pythonanywhere.com/api/userpost?limit=' 
           topheader={()=>{
            return(
             <View style={{flex:1}}>   
-                <ProfileCardComponent  item={token}/>
+                <ProfileCardComponent  item={gettoken()}/>
            </View>
             );
            }}
            issticky={0.1}
-           item={token} 
+           item={gettoken()} 
         />
     
     </View>

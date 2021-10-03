@@ -10,7 +10,6 @@ import MainComponent from './Components/MainComponent';
 import StackProfile from './Components/screens/StackProfile';
 import StackComment from './Components/screens/StackComment';
 import { AuthContext } from './Components/AuthContext';
-import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EditProfile from './Components/EditProfile';
 import FollowComponent from './Components/FollowComponent';
@@ -62,6 +61,10 @@ function App(){
     },
     logout:()=>{
       removeToken();
+    },
+    gettoken:()=>{
+      getToken();
+      return token;
     }
   })); 
      return(

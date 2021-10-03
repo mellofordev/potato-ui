@@ -10,7 +10,7 @@ export default function StackProfile({navigation,route}){
     
     return(
         
-    <View style={{flex:1}}>
+    <View style={{flex:1,backgroundColor:'#FCFCFC'}}>
         <Appbar.Header style={{backgroundColor:'#fff'}}>
             <Appbar.BackAction  onPress={()=>{navigation.goBack(null)}}/>
             <Appbar.Content title={user}/>
@@ -20,17 +20,18 @@ export default function StackProfile({navigation,route}){
        
  
           
-        <PostComponent apiUrl='https://punfuel.pythonanywhere.com/api/home?limit=' 
+        <PostComponent apiUrl={'https://punfuel.pythonanywhere.com/user-posts/'+route.params.username+'/?limit='} 
           topheader={()=>{
            return(
             <View style={{flex:1}}>   
-                <ProfileCardComponent item={token} url={'https://punfuel.pythonanywhere.com/accounts/api/profile/'+user+'/+'}/>
+                <ProfileCardComponent item={route.params.t} url={'https://punfuel.pythonanywhere.com/accounts/api/profile/'+route.params.username+'/'}/>
            </View>
             );
            }}
            issticky={0.1} 
-           token={token}
-           user={user}
+           item={route.params.t}
+           user={route.params.username}
+           
         />
     
     </View>

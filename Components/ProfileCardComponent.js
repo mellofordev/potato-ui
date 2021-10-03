@@ -1,18 +1,18 @@
 import React,{useState,useEffect} from 'react';
 import {View,Text, Image,  StyleSheet} from 'react-native';
-import { Card, Paragraph, Title,Button as RButton, ActivityIndicator } from 'react-native-paper';
+import { Card, Paragraph, Title, ActivityIndicator } from 'react-native-paper';
 import * as RootNavigation from './RootNavigation';
-
+import RButton from './RButtonComponent';
 
 export default function ProfileCardComponent({item,url='https://punfuel.pythonanywhere.com/accounts/profile/'}){
     const [data,setData]=useState([]);
     
     const [loading,setLoading]=useState(true);
-    const recieved_url=url;
-    console.log(recieved_url);
+    const [is_edit_allowed,setIsEdit]=useState(false);
+    const [is_follower,SetIsFollower]=useState(false);
     const apireq =()=>{
         
-        fetch(recieved_url,{
+        fetch(url,{
             method:'GET',
             headers:{
                 'Accept':'application/json',
@@ -25,13 +25,22 @@ export default function ProfileCardComponent({item,url='https://punfuel.pythonan
         })
         .then((response)=>response.json())
         .then(res=>{
-            
+            console.log(res.profile);
             setData(res.profile);
             
+            if(res.update.editprofile!="false"){
+                setIsEdit(true);
+
+            }
+            if(res.profile.is_follower==true){
+                SetIsFollower(true);
+            }
 
         }
         )
-        .catch(error=>console.log(error))
+        .catch(error=>{
+            console.log(error);
+        })
 
     }
 
@@ -47,15 +56,20 @@ export default function ProfileCardComponent({item,url='https://punfuel.pythonan
             
                         <Card.Content>
                             <View style={{flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
-                                <Image source={{uri:data.pic}} style={{height:95,width:95,borderRadius:15,borderColor:'#fffaf0',borderWidth:1}}/>
+                                <Image source={{uri:'https://punfuel.pythonanywhere.com'+data.user_profile_pic}} style={{height:95,width:95,borderRadius:15,borderColor:'#fffaf0',borderWidth:1}}/>
                                 <View style={{flexDirection:'row'}}>
                                 <Title style={{marginTop:5}}>@{data.user}</Title>
                                 
                                 </View>
                                 <Paragraph>{data.bio}</Paragraph>
-                                <RButton style={{marginTop:5,marginLeft:3,height:'15%',width:'80%',borderRadius:15,elevation:0}} mode='outlined' onPress={()=>RootNavigation.navigate('EditProfile')} >
-                                    <Text style={{color:'#7289DA',fontStyle:'normal',fontSize:20}}>Edit profile</Text>
-                                </RButton>
+                                <View style={{width:'100%',margin:5}}>
+                                {is_edit_allowed==true ?
+                                <RButton title={'Edit Profile'} _mode_='outlined' _onpress={()=>RootNavigation.navigate('EditProfile')}/>
+                                :[
+                                    is_follower==false ?<RButton title={'Follow'}   _onpress={()=>RootNavigation.navigate('EditProfile')}/> :[<RButton title={'Following'}   _onpress={()=>RootNavigation.navigate('EditProfile')}/>]
+                                ]
+                                }
+                                </View>
                                 <View style={styles.profilebox}>
                                     <View style={{marginLeft:7,flexDirection:'row'}}>
                                         <View style={{flexDirection:'column',marginRight:27,marginHorizontal:25}}>

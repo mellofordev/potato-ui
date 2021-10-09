@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import {View,Text, Image,  StyleSheet} from 'react-native';
+import {View,Text, Image,  StyleSheet,Alert} from 'react-native';
 import { Card, Paragraph, Title, ActivityIndicator } from 'react-native-paper';
 import * as RootNavigation from './RootNavigation';
 import RButton from './RButtonComponent';
@@ -25,7 +25,7 @@ export default function ProfileCardComponent({item,url='https://punfuel.pythonan
         })
         .then((response)=>response.json())
         .then(res=>{
-            console.log(res.profile);
+            
             setData(res.profile);
             
             if(res.update.editprofile!="false"){
@@ -43,11 +43,49 @@ export default function ProfileCardComponent({item,url='https://punfuel.pythonan
         })
 
     }
+    const unfollow=()=>{
+        fetch('https://punfuel.pythonanywhere.com/api/unfollow/'+data.user+'/',{
+            method:'DELETE',
+            headers:{
+                'Content-Type':'application/json',
+                'Authorization':'Token '+item,
 
+            }
+        })
+        .then(response=>response.json())
+        .then(data=>{
+            SetIsFollower(false);
+            if(data.unfollow){
+                Alert.alert('Unfollow',data.unfollowed);
+                
+            }
+        })
+        .catch(error=>{
+            Alert.alert('Something went wrong!',error);
+        })
+    }
+    const follow=()=>{
+        fetch('https://punfuel.pythonanywhere.com/api/follow/'+data.user+'/',{
+            method:'GET',
+            headers:{
+                'Content-Type':'application/json',
+                'Authorization':'Token '+item,
+
+            }
+        })
+        .then(response=>response.json())
+        .then(data=>{
+            console.log(data);
+        })
+        .catch(error=>{
+            Alert.alert('Something went wrong!');
+            console.log(error);
+        })
+    }
     useEffect(()=>{
         apireq();
         setLoading(false);
-    },[]);        
+    });        
         return(
             
                <View>
@@ -59,14 +97,14 @@ export default function ProfileCardComponent({item,url='https://punfuel.pythonan
                                 <Image source={{uri:'https://punfuel.pythonanywhere.com'+data.user_profile_pic}} style={{height:95,width:95,borderRadius:15,borderColor:'#fffaf0',borderWidth:1}}/>
                                 <View style={{flexDirection:'row'}}>
                                 <Title style={{marginTop:5}}>@{data.user}</Title>
-                                
+                                {data.verified==true && <Image style={{width:16,height:16,marginLeft:5,marginTop:16}} source={{uri:'https://s3-us-west-2.amazonaws.com/s.cdpn.io/1211695/twitter_verified.png'}}/>}
                                 </View>
                                 <Paragraph>{data.bio}</Paragraph>
                                 <View style={{width:'100%',margin:5}}>
                                 {is_edit_allowed==true ?
-                                <RButton title={'Edit Profile'} _mode_='outlined' _onpress={()=>RootNavigation.navigate('EditProfile')}/>
+                                <RButton title={'Edit Profile'}   _onpress={()=>RootNavigation.navigate('EditProfile',{bio:data.bio,img:data.user_profile_pic})}/>
                                 :[
-                                    is_follower==false ?<RButton title={'Follow'}   _onpress={()=>RootNavigation.navigate('EditProfile')}/> :[<RButton title={'Following'}   _onpress={()=>RootNavigation.navigate('EditProfile')}/>]
+                                    is_follower==false ?<RButton title={'Follow'}   _onpress={()=>{follow(); SetIsFollower(true);}}/> :[<RButton title={'Following'} _onpress={()=>{SetIsFollower(false); unfollow();}} />]
                                 ]
                                 }
                                 </View>
@@ -91,7 +129,7 @@ export default function ProfileCardComponent({item,url='https://punfuel.pythonan
                     </Card>:(<ActivityIndicator size={24}/>) }
                     <Card style={{marginTop:5,marginBottom:3}}>
                         <Card.Content>
-                            <Title>Posts</Title>
+                            <Title>{data.post_count==0?'User has posted yet!' :('Posts')}</Title>
                         </Card.Content>
                     </Card>
                 </View>

@@ -1,14 +1,13 @@
-import React from 'react';
-import {View,Image,Text} from 'react-native';
+import React,{useState,useEffect, useCallback} from 'react';
+import {View,Image,Text,ActivityIndicator} from 'react-native';
+
+
 export default function FooterComponent({item}){
-    
     return(
     
         <View style={{height:350,marginTop:10,margin:5,backgroundColor:'#fff',borderRadius:15,elevation:3}}>
             {item!=[] ?
-            (    <Image style={{borderRadius:15,height:'45%',width:'100%'}} source={{uri:'https://cinemagixblog.files.wordpress.com/2013/02/thatsallfolks.jpg'}}/> 
-                 
-                 )
+                 <Text style={{fontSize:35,margin:15,fontWeight:'bold'}}>That's all folks</Text>   
              :(
                 <View style={{margin:5}}>
                 </View>

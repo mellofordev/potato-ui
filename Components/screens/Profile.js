@@ -1,21 +1,25 @@
-import React,{useRef,useState,useEffect,useContext} from 'react';
-import {View,TouchableOpacity,Text} from 'react-native';
+import React,{useRef,useContext} from 'react';
+import {View,TouchableOpacity,Text, Alert} from 'react-native';
 import { Appbar,Divider } from 'react-native-paper';
 import ProfileCardComponent from '../ProfileCardComponent';
 import PostComponent from '../PostComponent';
 import { Modalize } from 'react-native-modalize';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../AuthContext';
 export default function Profile(){
     const {logout} =useContext(AuthContext);
     const {gettoken}=useContext(AuthContext);  
-    console.log(gettoken());
-
+    
     const modalizeRef = useRef(null);
     const onOpen=()=>{
         modalizeRef.current?.open()
     }
+    const readyLogout=()=>{
+        Alert.alert('Do you want to logout?','This will erase your account info from cache',[
+          {text:'cancel'},
+          {text:'logout',onPress:()=>logout()}
 
+        ],{cancelable:true});
+    }
     return(
     <>    
     <View style={{flex:1,backgroundColor:'#FCFCFC'}}>
@@ -47,7 +51,7 @@ export default function Profile(){
     }>
         <View style={{flexDirection:'column'}}>
         <View style={{margin:8}}>
-                <TouchableOpacity style={{marginLeft:5}} onPress={()=>logout()}>
+                <TouchableOpacity style={{marginLeft:5}} onPress={()=>readyLogout()}>
                     <Text style={{fontSize:25,color:'grey'}}>logout</Text>
                 </TouchableOpacity>
                 

@@ -6,12 +6,8 @@ import { Feather } from '@expo/vector-icons';
 import {View,Text} from 'react-native';
 import Notification from './screens/Notification';
 import Profile from './screens/Profile';
+import Post from './screens/Post';
 const Tabs =createBottomTabNavigator();
-function Post(){
-    return(
-        <View><Text>post</Text></View>
-    );
-}
 
 export default function MainComponent(){
     return(

@@ -1,5 +1,5 @@
 import React,{useRef,useEffect,useState} from 'react';
-import {View,StyleSheet,Image,Text,FlatList,} from 'react-native';
+import {View,StyleSheet,Image,Text,FlatList, TouchableOpacity,} from 'react-native';
 import {Appbar,Card,Title} from 'react-native-paper';
 import PostComponent from '../PostComponent';
 import { Modalize } from 'react-native-modalize';
@@ -75,7 +75,12 @@ export default function Home(){
                                         return(
                                         <View style={styles.CategoryButton}>
                                             <Image source={{uri:'https://punfuel.pythonanywhere.com/media/default.png/'}} style={{borderRadius:8,height:55,width:55}}/>
-                                            <Text style={{margin:2,fontSize:13,color:'#FCFCFC',textAlign:'center'}}>{item.category}</Text>
+                                            <View style={{flexDirection:'column'}}>
+                                            <Text style={{margin:2,fontSize:13,color:'#FCFCFC',textAlign:'center'}}>{(item.category).length<=20 ?item.category  :( (item.category).slice(0,18)+'...')}</Text>
+                                            <TouchableOpacity>
+                                            <Text style={{marginLeft:3,color:'#7289DA'}}>Follow</Text>
+                                            </TouchableOpacity>
+                                            </View>
                                         </View>
                                         
                                         );

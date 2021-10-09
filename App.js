@@ -1,6 +1,6 @@
 
 import React from 'react';
-import {View,Image, ActivityIndicator} from 'react-native';
+import {Image} from 'react-native';
 import { navigationRef } from './Components/RootNavigation';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -17,9 +17,8 @@ const Stack =createStackNavigator();
 
 function App(){
   
-  const [isloading,setIsLoading]=React.useState(true);
   const [token,setToken]=React.useState(null);
-
+ 
   const storeToken = async (value) => {
     try {
       await AsyncStorage.setItem('token', value)
@@ -65,7 +64,8 @@ function App(){
     gettoken:()=>{
       getToken();
       return token;
-    }
+    },
+
   })); 
      return(
       <AuthContext.Provider value={context}>

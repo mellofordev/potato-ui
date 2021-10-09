@@ -5,6 +5,7 @@ import { Modalize } from 'react-native-modalize';
 import RButton from '../RButtonComponent';
 import { Feather } from '@expo/vector-icons';
 import FooterComponent from '../FooterComponent';
+import { FixedBottom } from '../FixedBottomComponent';
 export default function StackComment({route}){
     const [isloading,setIsLoading]=useState(false);
     const [error,setError]=useState();
@@ -76,12 +77,7 @@ export default function StackComment({route}){
     const wait = (timeout) => {
         return new Promise(resolve => setTimeout(resolve, timeout));
     }
-    const FixedBottom =({children})=>{
-        return(
-        <View style={{position:'absolute',bottom:10,right:0,left:0,marginBottom:16}}>
-            {children}
-        </View>);
-    }
+
     return(
         <>
         <View style={styles.container}>
@@ -121,8 +117,8 @@ export default function StackComment({route}){
         />
         )}
         <FixedBottom>
-            <TouchableOpacity style={{marginRight:12}} onPress={()=>{onOpen()}}>
-            <View style={{height:30,width:'100%',marginBottom:24,margin:5}}>
+            <TouchableOpacity  onPress={()=>{onOpen()}}>
+            <View style={{height:30,width:'100%',marginBottom:24}}>
                 <RButton title={'write your comment'}/>
             </View>
             </TouchableOpacity>

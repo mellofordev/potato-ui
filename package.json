@@ -26,7 +26,8 @@
     "react-native-svg": "12.1.0",
     "react-native-web": "~0.13.12",
     "expo-secure-store": "~10.1.0",
-    "@react-native-async-storage/async-storage": "^1.13.0"
+    "@react-native-async-storage/async-storage": "^1.13.0",
+    "expo-image-picker": "~10.1.4"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"

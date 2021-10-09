@@ -7,7 +7,7 @@ export default function FollowComponent({item}){
     return(
         <View style={{backgroundColor:'#fff'}}> 
         
-            <Title style={{marginLeft:10}}>Follow some users to get started</Title>
+            
                   
         <FlatList
            data={item}

@@ -10,6 +10,7 @@ export default function ProfileCardComponent({item,url='https://punfuel.pythonan
     const [loading,setLoading]=useState(true);
     const [is_edit_allowed,setIsEdit]=useState(false);
     const [is_follower,SetIsFollower]=useState(false);
+    const [followCount,setFollowCount]=useState(0);
     const apireq =()=>{
         
         fetch(url,{
@@ -27,7 +28,7 @@ export default function ProfileCardComponent({item,url='https://punfuel.pythonan
         .then(res=>{
             
             setData(res.profile);
-            
+            setFollowCount(res.profile.follower_count);
             if(res.update.editprofile!="false"){
                 setIsEdit(true);
 
@@ -44,6 +45,8 @@ export default function ProfileCardComponent({item,url='https://punfuel.pythonan
 
     }
     const unfollow=()=>{
+        SetIsFollower(false); 
+        setFollowCount(followCount-1); 
         fetch('https://punfuel.pythonanywhere.com/api/unfollow/'+data.user+'/',{
             method:'DELETE',
             headers:{
@@ -54,7 +57,7 @@ export default function ProfileCardComponent({item,url='https://punfuel.pythonan
         })
         .then(response=>response.json())
         .then(data=>{
-            SetIsFollower(false);
+            
             if(data.unfollow){
                 Alert.alert('Unfollow',data.unfollowed);
                 
@@ -65,6 +68,8 @@ export default function ProfileCardComponent({item,url='https://punfuel.pythonan
         })
     }
     const follow=()=>{
+        SetIsFollower(true);
+        setFollowCount(followCount+1);
         fetch('https://punfuel.pythonanywhere.com/api/follow/'+data.user+'/',{
             method:'GET',
             headers:{
@@ -74,18 +79,15 @@ export default function ProfileCardComponent({item,url='https://punfuel.pythonan
             }
         })
         .then(response=>response.json())
-        .then(data=>{
-            console.log(data);
-        })
         .catch(error=>{
-            Alert.alert('Something went wrong!');
-            console.log(error);
+            Alert.alert('Something went wrong!',error);
+           
         })
     }
     useEffect(()=>{
         apireq();
         setLoading(false);
-    });        
+    },[]);        
         return(
             
                <View>
@@ -104,7 +106,7 @@ export default function ProfileCardComponent({item,url='https://punfuel.pythonan
                                 {is_edit_allowed==true ?
                                 <RButton title={'Edit Profile'}   _onpress={()=>RootNavigation.navigate('EditProfile',{bio:data.bio,img:data.user_profile_pic})}/>
                                 :[
-                                    is_follower==false ?<RButton title={'Follow'}   _onpress={()=>{follow(); SetIsFollower(true);}}/> :[<RButton title={'Following'} _onpress={()=>{SetIsFollower(false); unfollow();}} />]
+                                    is_follower==false ?<RButton title={'Follow'}   _onpress={()=>{follow();}}/> :(<RButton title={'Following'} color={'#2C2F33'} _onpress={()=>{unfollow();}} />)
                                 ]
                                 }
                                 </View>
@@ -115,7 +117,7 @@ export default function ProfileCardComponent({item,url='https://punfuel.pythonan
                                             <Paragraph style={styles.paragraphColor}>Posts</Paragraph>
                                         </View>
                                         <View style={{flexDirection:'column',marginRight:27,marginHorizontal:25}}>
-                                            <Title style={styles.profileNumberOptions}>{data.follower_count}</Title>
+                                            <Title style={styles.profileNumberOptions}>{followCount}</Title>
                                             <Paragraph style={styles.paragraphColor}>Followers</Paragraph>
                                         </View>
                                         <View style={{flexDirection:'column',marginRight:27,marginHorizontal:25}}>

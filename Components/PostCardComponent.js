@@ -1,11 +1,46 @@
-import React from 'react';
-import {View,StyleSheet,Image,Text,TouchableOpacity} from 'react-native';
+import React,{useState} from 'react';
+import {View,StyleSheet,Image,Text,TouchableOpacity, Alert} from 'react-native';
 import { EvilIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import * as RootNavigation from './RootNavigation';
 export default function PostCard({item,onOpen,token}){
 
     var uid=item.id;
     var user=item.user;
+    const [like,setLike]=useState(item.liked);
+    const [like_count,setLikeCount]=useState(item.like_count);
+    const onLike =()=>{
+        if(like==false){
+            setLike(true);
+            setLikeCount(like_count+1);
+            fetch('https://punfuel.pythonanywhere.com/api/like/'+item.id+'/',{
+                method:'GET',
+                headers:{
+                    'Content-Types':'application/json',
+                    'Authorization':'Token '+token,
+                }
+            })
+            .then(response=>response.json())
+            .catch(error=>{
+                Alert.alert('Something unexpected happened!');
+            })
+
+        }else{
+            setLikeCount(like_count-1);
+            setLike(false);
+            fetch('https://punfuel.pythonanywhere.com/api/unlike/'+item.id+'/',{
+                method:'Delete',
+                headers:{
+                    'Content-Types':'application/json',
+                    'Authorization':'Token '+token,
+                }
+            })
+            .then(response=>response.json())
+            .catch(error=>{
+                Alert.alert('Something unexpected happened!');
+            })
+        }
+    }
     return(
 
     <View style={styles.container}>
@@ -31,8 +66,14 @@ export default function PostCard({item,onOpen,token}){
                 }
                 <View style={styles.postIcons}>
                     <View style={{flexDirection:'row'}}>
-                        <EvilIcons name="heart" size={34} color="#2C2F33" />
-                        <Text style={{color:'#7289DA',marginTop:3}}>{item.like_count}</Text>
+                        <TouchableOpacity onPress={()=>{onLike();}}>
+                        {
+                        like==false?    
+                        <Ionicons name="heart-outline" size={26} color="#2C2F33" />
+                        :(<Ionicons name="heart-sharp" size={26} color="#7289DA" />)
+                        }
+                        </TouchableOpacity>
+                        <Text style={{color:'#7289DA',marginTop:3}}>{like_count}</Text>
                     </View>
                     <View style={{flexDirection:'row'}}>
                         <TouchableOpacity onPress={()=>{RootNavigation.navigate('StackComment',{id:uid,t:token})}}>

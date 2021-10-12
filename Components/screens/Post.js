@@ -52,21 +52,22 @@ export default function Post(){
      
         if(!result.cancelled){
             setImage(result.uri);
+            console.log(result.uri.split('/').pop())
         }
     }
     
       const apirequest =()=>{
-          
+          var imgname=image.split('/').pop();
           fetch('https://punfuel.pythonanywhere.com/newpost/',{
               method:'POST',
               headers:{
-                  'Content-Type':'application/json',
+                  'Content-Type':'multipart/form-data',
                   'Authorization':'Token '+token,
 
               },
               body:JSON.stringify({
                   post:text,
-                  pic:image
+                  pic:imgname,
               })
           })
           .then(response=>response.json())
@@ -77,7 +78,8 @@ export default function Post(){
               console.log(data);
           })
           .catch(error=>{
-              Alert.alert('Network Error',error);
+              Alert.alert('Network Error');
+              console.log(error);
               
           })
       }

@@ -11,6 +11,7 @@ export default function Post(){
     const [image,setImage]=useState(null);
     const [text,setText]=useState(null);
     const [isdisabled,setIsDisabled]=useState(true);
+    const [loading,setLoading]=useState(false);
     const {gettoken} =useContext(AuthContext);
     const token =gettoken();
     useEffect(()=>{
@@ -52,12 +53,29 @@ export default function Post(){
      
         if(!result.cancelled){
             setImage(result.uri);
-            console.log(result.uri.split('/').pop())
+            
+            
         }
     }
     
       const apirequest =()=>{
+          setLoading(true);
+          var formdata = new FormData();
+          formdata.append('post',text);
+    
+          if(image!=null){
           var imgname=image.split('/').pop();
+          var imgType=imgname.split('.').pop();
+          formdata.append('pic',{
+            uri:image,
+            name:imgname,
+            type:'image/'+imgType,
+          });
+          }else{
+              formdata.append('pic',null);
+          }
+  
+
           fetch('https://punfuel.pythonanywhere.com/newpost/',{
               method:'POST',
               headers:{
@@ -65,14 +83,12 @@ export default function Post(){
                   'Authorization':'Token '+token,
 
               },
-              body:JSON.stringify({
-                  post:text,
-                  pic:imgname,
-              })
+              body:formdata
           })
           .then(response=>response.json())
           .then(data=>{
               Alert.alert('Posted successfully!');
+              setLoading(false);
               setImage(null);
               setText('');
               console.log(data);
@@ -94,22 +110,24 @@ export default function Post(){
                   
            </View> 
            
-           <View style={{flexDirection:'row'}}>
+           <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
                <TouchableOpacity style={{marginLeft:15,marginTop:5,backgroundColor:'#FCFCFC',borderRadius:10}} onPress={()=>{pickImage()}}>
-                    <Feather name="image" size={44} color="grey" />
+                    <Feather name="image" size={44} color="#2C2F33" />
                     
                </TouchableOpacity>
-               <Text style={{textAlign:'center',color:'grey',marginTop:15}}>{image==null ?'Add image' :('add new image')}</Text>
+               <Text style={{textAlign:'center',color:'#2C2F33',marginTop:15}}>{image==null ?'Add image' :('add new image')}</Text>
                <TouchableOpacity style={{marginLeft:15,marginTop:5,backgroundColor:'#FCFCFC',borderRadius:10}} onPress={()=>{pickCamera()}}>
-                    <MaterialIcons name="add-a-photo" size={44} color="grey" />
+                    <MaterialIcons name="add-a-photo" size={44} color="#2C2F33" />
                </TouchableOpacity>
-               <Text style={{textAlign:'center',color:'grey',marginTop:15}}>camera</Text>
+               <Text style={{textAlign:'center',color:'#2C2F33',marginTop:15}}>camera</Text>
            </View>
            <View style={{margin:5}}>
             {isdisabled==true ? <RButton title={'POST'} _is_disabled={true}/>
-            :(
+            :[
+              loading==false ?  
            <RButton title={'POST'}  _onpress={()=>{apirequest()}}/>
-             ) }
+            :(<RButton title={'Posting...'} />)
+             ] }
            </View>
            <Divider/>
               <View style={{margin:5}}>

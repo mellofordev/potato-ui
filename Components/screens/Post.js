@@ -106,7 +106,7 @@ export default function Post(){
            <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',marginBottom:5}}>
                
                 <Image source={{uri:'https://punfuel.pythonanywhere.com/media/default.png/'}} style={styles.userimg}/>
-                <TextInput multiline={true} numberOfLines={3} placeholder={'place to write...'} value={text} onChangeText={(text)=>setText(text)} style={styles.input}/>
+                <TextInput multiline={true} numberOfLines={3} placeholder={' place to write...'} value={text} onChangeText={(text)=>setText(text)} style={styles.input}/>
                   
            </View> 
            

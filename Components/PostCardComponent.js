@@ -1,14 +1,15 @@
 import React,{useState} from 'react';
-import {View,StyleSheet,Image,Text,TouchableOpacity, Alert} from 'react-native';
+import {View,StyleSheet,Image,Text,TouchableOpacity, Alert,Dimensions} from 'react-native';
 import { EvilIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import * as RootNavigation from './RootNavigation';
 export default function PostCard({item,onOpen,token}){
-
+   
     var uid=item.id;
     var user=item.user;
     const [like,setLike]=useState(item.liked);
     const [like_count,setLikeCount]=useState(item.like_count);
+    
     const onLike =()=>{
         if(like==false){
             setLike(true);
@@ -62,7 +63,7 @@ export default function PostCard({item,onOpen,token}){
             <View style={styles.postContent}>
                 <Text style={{fontSize:19}}>{item.post}</Text>
                 { item.pic!=null &&
-                    <Image source={{uri:item.pic}}  style={{resizeMode:'contain',width:undefined,height:undefined,aspectRatio:1}}/>
+                    <Image source={{uri:item.pic}}  style={{resizeMode:'contain',width:'100%',height:undefined,aspectRatio:1}}/>
                 }
                 <View style={styles.postIcons}>
                     <View style={{flexDirection:'row'}}>

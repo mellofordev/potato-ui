@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {View} from 'react-native';
 import { Appbar } from 'react-native-paper';
 import ProfileCardComponent from '../ProfileCardComponent';
 import PostComponent from '../PostComponent';
+
 export default function StackProfile({navigation,route}){
     
     const user=route.params.username;
     const token=route.params.t;
-    
-    return(
-        
+    useEffect(()=>{
+        const user=route.params.username;
+        const token=route.params.t;
+    })
+    return( 
     <View style={{flex:1,backgroundColor:'#FCFCFC'}}>
         <Appbar.Header style={{backgroundColor:'#fff'}}>
             <Appbar.BackAction  onPress={()=>{navigation.goBack(null)}}/>
@@ -24,7 +27,11 @@ export default function StackProfile({navigation,route}){
           topheader={()=>{
            return(
             <View style={{flex:1}}>   
-                <ProfileCardComponent item={route.params.t} url={'https://punfuel.pythonanywhere.com/accounts/api/profile/'+route.params.username+'/'}/>
+                <ProfileCardComponent 
+                item={route.params.t} 
+                url={'https://punfuel.pythonanywhere.com/accounts/api/profile/'+route.params.username+'/'}
+                
+                />
            </View>
             );
            }}
@@ -34,7 +41,6 @@ export default function StackProfile({navigation,route}){
            
         />
     
-    </View>
-        
+    </View>      
     );
 }

@@ -1,16 +1,17 @@
 import React,{useState,useEffect} from 'react';
-import {View,Text, Image,  StyleSheet,Alert} from 'react-native';
+import {View,Text, Image,  StyleSheet,Alert, TouchableOpacity} from 'react-native';
 import { Card, Paragraph, Title, ActivityIndicator } from 'react-native-paper';
 import * as RootNavigation from './RootNavigation';
 import RButton from './RButtonComponent';
 
-export default function ProfileCardComponent({item,url='https://punfuel.pythonanywhere.com/accounts/profile/'}){
+export default function ProfileCardComponent({navigation,item,url='https://punfuel.pythonanywhere.com/accounts/profile/'}){
     const [data,setData]=useState([]);
     
     const [loading,setLoading]=useState(true);
     const [is_edit_allowed,setIsEdit]=useState(false);
     const [is_follower,SetIsFollower]=useState(false);
     const [followCount,setFollowCount]=useState(0);
+    
     const apireq =()=>{
         
         fetch(url,{
@@ -84,6 +85,7 @@ export default function ProfileCardComponent({item,url='https://punfuel.pythonan
            
         })
     }
+
     useEffect(()=>{
         apireq();
         setLoading(false);
@@ -117,12 +119,16 @@ export default function ProfileCardComponent({item,url='https://punfuel.pythonan
                                             <Paragraph style={styles.paragraphColor}>Posts</Paragraph>
                                         </View>
                                         <View style={{flexDirection:'column',marginRight:27,marginHorizontal:25}}>
+                                            <TouchableOpacity onPress={()=>{RootNavigation.push('FollowStackComponent',{username:data.user,token:item,type:'followers'})}}>
                                             <Title style={styles.profileNumberOptions}>{followCount}</Title>
                                             <Paragraph style={styles.paragraphColor}>Followers</Paragraph>
+                                            </TouchableOpacity>
                                         </View>
                                         <View style={{flexDirection:'column',marginRight:27,marginHorizontal:25}}>
+                                            <TouchableOpacity onPress={()=>{RootNavigation.push('FollowStackComponent',{username:data.user,token:item,type:'following'})}}>
                                             <Title>{data.following_count}</Title>
                                             <Paragraph style={styles.paragraphColor}>Following</Paragraph>
+                                            </TouchableOpacity>
                                         </View>
                                     </View>
                                 </View>

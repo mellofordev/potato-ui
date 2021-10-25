@@ -72,7 +72,7 @@ export default function Post(){
             type:'image/'+imgType,
           });
           }else{
-              formdata.append('pic',null);
+              formdata.append('pic','');
           }
   
 

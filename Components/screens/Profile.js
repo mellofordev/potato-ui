@@ -1,4 +1,4 @@
-import React,{useRef,useContext,useState} from 'react';
+import React,{useRef,useContext,useState, useEffect} from 'react';
 import {View,TouchableOpacity,Text, Alert} from 'react-native';
 import { Appbar,Divider } from 'react-native-paper';
 import ProfileCardComponent from '../ProfileCardComponent';
@@ -8,9 +8,8 @@ import { AuthContext } from '../AuthContext';
 export default function Profile(){
     const {logout} =useContext(AuthContext);
     const {gettoken}=useContext(AuthContext);  
-    const [conditionalRender,setConditionalRender]=useState('settings');
+
     const modalizeRef = useRef(null);
-    const [followdata,setFollowData]=useState([]);
     const onOpen=()=>{
         modalizeRef.current?.open()
     }
@@ -27,15 +26,16 @@ export default function Profile(){
     <View style={{flex:1,backgroundColor:'#FCFCFC'}}>
         <Appbar.Header style={{backgroundColor:'#fff'}}>
             <Appbar.Content title={'Your Profile'}/>
-            <Appbar.Action icon='account-cog'  style={{right:1}} onPress={()=>{onOpen();setConditionalRender('settings');}}/>
+            <Appbar.Action icon='account-cog'  style={{right:1}} onPress={()=>{onOpen()}}/>
         </Appbar.Header>
         
-    
-        <PostComponent apiUrl='https://punfuel.pythonanywhere.com/api/userpost?limit=' 
+        <PostComponent apiUrl={'https://punfuel.pythonanywhere.com/api/userpost/?limit='} 
           topheader={()=>{
+              
            return(
             <View style={{flex:1}}>   
-                <ProfileCardComponent  item={gettoken()} 
+                <ProfileCardComponent  item={gettoken()}
+                
 
                 />
            </View>
@@ -51,11 +51,11 @@ export default function Profile(){
     <Modalize snapPoint={300} modalHeight={500} ref={modalizeRef}
     HeaderComponent={
         <View>
-            <Text style={{fontSize:20,textAlign:'center',marginTop:3}}>{conditionalRender}</Text>
+            <Text style={{fontSize:20,textAlign:'center',marginTop:3}}>settings</Text>
             <Divider/>
         </View>
     }>
-        {conditionalRender=='settings' ?
+
         <View style={{flexDirection:'column'}}>
         <View style={{margin:8}}>
                 <TouchableOpacity style={{marginLeft:5}} onPress={()=>readyLogout()}>
@@ -77,26 +77,7 @@ export default function Profile(){
         </View>
         
         </View>
-        :[
-            conditionalRender=='followers'?
-            <View style={{flexDirection:'column'}}>
 
-                {
-                followdata!=[] ?    
-                followdata.map(id=>{
-                    <Text>{id.user}</Text>
-                    
-                })
-                :
-                <Text>No followers to show</Text>
-                }
-            </View>
-            :
-            <View>
-                <Text>Following are private</Text>
-            </View>
-        ]
-        }
     </Modalize>
     </>
     );

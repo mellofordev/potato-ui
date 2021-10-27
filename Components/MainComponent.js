@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState,useContext,useEffect} from 'react';
 import Home from './screens/Home';
 import Trending from './screens/Trending';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -7,9 +7,31 @@ import {View,Text} from 'react-native';
 import Notification from './screens/Notification';
 import Profile from './screens/Profile';
 import Post from './screens/Post';
+import { AuthContext } from './AuthContext';
 const Tabs =createBottomTabNavigator();
 
 export default function MainComponent(){
+    const [notificationCount,setNotificationCount]=useState(0);
+    const {gettoken}=useContext(AuthContext);
+    const NotificationFetch=()=>{
+      fetch('https://punfuel.pythonanywhere.com/api/notification/count/',{
+        method:'GET',
+        headers:{
+          'Content-Type':'application/json',
+          'Authorization':'Token '+gettoken()
+        }
+      })
+      .then(response=>response.json())
+      .then(data=>{
+        setNotificationCount(data.notificationcount);
+      })
+      .catch(error=>{
+        console.log(error);
+      })
+    }
+    useEffect(()=>{
+      NotificationFetch();
+    });
     return(
         <Tabs.Navigator tabBarOptions={{ 
             showLabel:false,
@@ -27,7 +49,13 @@ export default function MainComponent(){
              tabBarIcon:({focused})=>{
                  return(
                     <View style={{position:'absolute',top:15}}>
-                      <Feather name="home" size={24} color={focused?'black':'grey'} />
+                      {notificationCount==0?<Feather name="home" size={24} color={focused?'black':'grey'} />:(
+                        <View>
+                           <Feather name="home" size={24} color={focused?'black':'grey'} />
+                           <Text style={{borderRadius:8,backgroundColor:'red',color:'white',top:-35,width:20,height:20,textAlign:'center',fontWeight:'500',left:230,elevation:3}}>{notificationCount}</Text>
+                          
+                        </View>  
+                      )}
                     </View>
                  );
                  

@@ -1,9 +1,11 @@
-import React,{useRef,useEffect,useState} from 'react';
+import React,{useRef,useEffect,useState, useContext} from 'react';
 import {View,StyleSheet,Image,Text,FlatList, TouchableOpacity,} from 'react-native';
 import {Appbar,Card,Title} from 'react-native-paper';
 import PostComponent from '../PostComponent';
 import { Modalize } from 'react-native-modalize';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AuthContext} from '../AuthContext';
+
 const categories =[
     {
         id:1,
@@ -28,25 +30,16 @@ const categories =[
 ];
 
 export default function Home(){
-    const [token,setToken]=useState(null);
-    const getToken = async () => {
-        try {
-          const value = await AsyncStorage.getItem('token');
-          setToken(value);
-        } catch(e) {
-          console.log(e);
-        }
-        
-      }
+    
+    const {gettoken}=useContext(AuthContext);
+
     const modalizeRef = useRef(null);
     //const [token,setToken]=useState(null);
 
     const onOpen=()=>{
         modalizeRef.current?.open()
     } 
-    useEffect(()=>{
-        getToken();
-    },[])
+
     return(
     <>
     <View>
@@ -60,13 +53,13 @@ export default function Home(){
          
 
           <View style={styles.container}>
-         {token!=null &&   
+         {gettoken()!=null &&   
          <PostComponent apiUrl='https://punfuel.pythonanywhere.com/api/home?limit=' 
          onOpen={onOpen}
          topheader={()=>{
                      return(
                         <View style={{flexDirection:'column'}}>
-                                    <Title style={{marginLeft:5,}}>Find new people.</Title>
+                                    <Title style={{marginLeft:5,}}>Cool new people.</Title>
                                     <FlatList
                                     data={categories}
                                     keyExtractor={({id})=>id.toString()}
@@ -94,7 +87,7 @@ export default function Home(){
                         );
          }}
          issticky={[0]}
-         item={token}
+         item={gettoken()}
          />} 
          </View>  
         </View>

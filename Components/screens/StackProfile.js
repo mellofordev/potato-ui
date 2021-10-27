@@ -8,10 +8,7 @@ export default function StackProfile({navigation,route}){
     
     const user=route.params.username;
     const token=route.params.t;
-    useEffect(()=>{
-        const user=route.params.username;
-        const token=route.params.t;
-    })
+
     return( 
     <View style={{flex:1,backgroundColor:'#FCFCFC'}}>
         <Appbar.Header style={{backgroundColor:'#fff'}}>
@@ -28,7 +25,7 @@ export default function StackProfile({navigation,route}){
            return(
             <View style={{flex:1}}>   
                 <ProfileCardComponent 
-                item={route.params.t} 
+                item={token} 
                 url={'https://punfuel.pythonanywhere.com/accounts/api/profile/'+route.params.username+'/'}
                 
                 />

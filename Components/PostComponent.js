@@ -1,5 +1,5 @@
 import React,{useState,useEffect,useCallback } from 'react';
-import {View,FlatList, ActivityIndicator, RefreshControl,Alert} from 'react-native';
+import {View,FlatList, ActivityIndicator, RefreshControl,Alert,Text} from 'react-native';
 import PostCard from './PostCardComponent';
 import FooterComponent from './FooterComponent';
 import FollowComponent from './FollowComponent';
@@ -7,7 +7,7 @@ import FollowComponent from './FollowComponent';
 export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item}){
     const [isLoading,setIsLoading]=useState(false);
     const [data,setData]=useState([]);
-    const [error,setError]=useState();
+    const [error,setError]=useState(false);
     const [isRefreshing,setIsRefreshing]=useState(false);
     const [fetchcount,setfetchcount]=useState(10);
     const [url,setUrl]=useState(apiUrl+fetchcount);
@@ -30,12 +30,13 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
         .then(data=>{
             
             if(data.results.feed){
+                console.log(data.results.feed);
                 setData(data.results.feed);
                 setRender(data.results.follow);
             }else{
                 
                 setData(data.follow);
-                console.log(data.follow);
+                console.log(data);
                 
             }
             setIsLoading(true);
@@ -56,8 +57,10 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
     /*const reRender=useCallback(()=>{
         apirequest();
     },[])*/
-    const fetchmore = (url)=>{
-        
+    const fetchmore = ()=>{
+        setfetchcount(fetchcount+3); 
+        setUrl(apiUrl+fetchcount);
+        console.log(url);
         fetch(url,{
             method:'GET',
             header:{
@@ -67,7 +70,7 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
         })
         .then(response =>response.json())
         .then((result =>{
-            
+            console.log(recieved_token,url,result);
             setData([...data,...result.results.feed]);
         }))
         .catch((error)=>{console.log(error)})
@@ -86,13 +89,13 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
     
     return(
         <View> 
-        {!isLoading ? <ActivityIndicator size={44} color='#7289DA' style={{marginTop:12}}/> :(
-            
+        {!isLoading ? <ActivityIndicator size={44} color='#7289DA' style={{marginTop:12}}/> :[
+        error==false ?     
         <FlatList
             data={data}
             
-            renderItem={({item})=><PostCard item={item} onOpen={onOpen} token={recieved_token}/>}
-            keyExtractor={(item,index)=>(index).toString()}
+            renderItem={({item},index)=><PostCard item={item} onOpen={onOpen} token={recieved_token}/>}
+            keyExtractor={(item,index)=>item.id}
             ListFooterComponent={()=><FooterComponent item={render}/>}
             refreshControl={
                 <RefreshControl 
@@ -105,10 +108,7 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
             stickyHeaderIndices={[issticky]}
             onEndReached={()=>{
         
-                setfetchcount(fetchcount+3); 
-                setUrl(apiUrl+fetchcount);
-                
-                fetchmore(url);
+                fetchmore();
             
                 
                 
@@ -117,7 +117,8 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
             
             
         />
-        )}
+        :(<View><Text>{error}</Text></View>)
+        ]}
 
     </View>
     );

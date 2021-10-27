@@ -1,15 +1,15 @@
 import React,{useState} from 'react';
-import {View,StyleSheet,Image,Text,TouchableOpacity, Alert,Dimensions} from 'react-native';
+import {View,StyleSheet,Image,Text,TouchableOpacity, Alert,Dimensions,Linking} from 'react-native';
 import { EvilIcons } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons,Octicons } from '@expo/vector-icons';
 import * as RootNavigation from './RootNavigation';
+import ParsedText from 'react-native-parsed-text';
 export default function PostCard({item,onOpen,token}){
    
     var uid=item.id;
     var user=item.user;
     const [like,setLike]=useState(item.liked);
     const [like_count,setLikeCount]=useState(item.like_count);
-    
     const onLike =()=>{
         if(like==false){
             setLike(true);
@@ -42,10 +42,26 @@ export default function PostCard({item,onOpen,token}){
             })
         }
     }
+    const Usernamepress=(name,matchIndex)=>{
+        let nameAfterSlice=name.slice(1);
+        
+        RootNavigation.push('StackProfile',{username:nameAfterSlice,t:token});
+    }
+    const renderText =(matchingString, matches)=> {
+        
+        let pattern = /@(?=.{3,20}(?:\s|$))[a-z][a-z0-9]+(?:[._][a-z0-9]+)?/ig;
+        
+        let match = matchingString.match(pattern);
+        
+        return match[0];
+    }
+    const Urlpress=(url,matchIndex)=>{
+        Linking.openURL(url);
+    }
     return(
-
+     
     <View style={styles.container}>
-           
+         
     <View style={styles.postContainer}>
         <View style={{margin:5}}>
             <View style={styles.postHeader}>
@@ -55,13 +71,18 @@ export default function PostCard({item,onOpen,token}){
                 <View style={styles.postNameContainer}>
                     <Text style={{fontSize:19,marginLeft:15}}>@{item.user}</Text>
                     { item.verified==true &&
-                        <Image style={{width:16,height:16,marginTop:6,marginLeft:3}} source={{uri:'https://s3-us-west-2.amazonaws.com/s.cdpn.io/1211695/twitter_verified.png'}}/>  
+                        <Octicons name="verified" size={17} style={{width:17,height:17,marginLeft:5,marginTop:7}} color="#1DA1F2" />
+                          
                     }
                 </View>
                 
             </View>
             <View style={styles.postContent}>
-                <Text style={{fontSize:19}}>{item.post}</Text>
+                <ParsedText style={{fontSize:19}} 
+                parse={[
+                    {type:'url',style:styles.parsedurl,onPress:Urlpress},
+                    {pattern: /@(?=.{3,20}(?:\s|$))[a-z][a-z0-9]+(?:[._][a-z0-9]+)?/ig, style: styles.mentiontextusername, onPress:Usernamepress, renderText:renderText},
+                ]}>{item.post}</ParsedText>
                 { item.pic!=null &&
                     <Image source={{uri:item.pic}}  style={{resizeMode:'contain',width:'100%',height:undefined,aspectRatio:1}}/>
                 }
@@ -94,7 +115,7 @@ export default function PostCard({item,onOpen,token}){
         </View>
     </View>
     </View>
-
+   
     );
 }
 
@@ -146,6 +167,16 @@ const styles=StyleSheet.create({
         justifyContent:'space-between',
 
     },
+    parsedurl:{
+        color:'blue',
+        fontWeight:'300'
+
+    },
+    mentiontextusername:{
+        color:'blue',
+        fontWeight:'500',
+        
+    }
 
 
     

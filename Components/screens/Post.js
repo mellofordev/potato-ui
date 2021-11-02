@@ -6,6 +6,7 @@ import * as ImagePicker from 'expo-image-picker';
 import {Divider} from 'react-native-paper';
 import { AuthContext } from '../AuthContext';
 import { MaterialIcons } from '@expo/vector-icons';
+import { blackshade, whitegreyshade } from '../defaultValues';
 const width=Dimensions.get("window").width;
 export default function Post(){
     const [image,setImage]=useState(null);
@@ -91,7 +92,7 @@ export default function Post(){
               setLoading(false);
               setImage(null);
               setText('');
-              console.log(data);
+              
           })
           .catch(error=>{
               Alert.alert('Network Error');
@@ -111,15 +112,15 @@ export default function Post(){
            </View> 
            
            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
-               <TouchableOpacity style={{marginLeft:15,marginTop:5,backgroundColor:'#FCFCFC',borderRadius:10}} onPress={()=>{pickImage()}}>
-                    <Feather name="image" size={44} color="#2C2F33" />
+               <TouchableOpacity style={{marginLeft:15,marginTop:5,backgroundColor:whitegreyshade,borderRadius:10}} onPress={()=>{pickImage()}}>
+                    <Feather name="image" size={44} color={blackshade} />
                     
                </TouchableOpacity>
-               <Text style={{textAlign:'center',color:'#2C2F33',marginTop:15}}>{image==null ?'Add image' :('add new image')}</Text>
-               <TouchableOpacity style={{marginLeft:15,marginTop:5,backgroundColor:'#FCFCFC',borderRadius:10}} onPress={()=>{pickCamera()}}>
-                    <MaterialIcons name="add-a-photo" size={44} color="#2C2F33" />
+               <Text style={{textAlign:'center',color:blackshade,marginTop:15}}>{image==null ?'Add image' :('add new image')}</Text>
+               <TouchableOpacity style={{marginLeft:15,marginTop:5,backgroundColor:whitegreyshade,borderRadius:10}} onPress={()=>{pickCamera()}}>
+                    <MaterialIcons name="add-a-photo" size={44} color={blackshade} />
                </TouchableOpacity>
-               <Text style={{textAlign:'center',color:'#2C2F33',marginTop:15}}>camera</Text>
+               <Text style={{textAlign:'center',color:blackshade,marginTop:15}}>camera</Text>
            </View>
            <View style={{margin:5}}>
             {isdisabled==true ? <RButton title={'POST'} _is_disabled={true}/>

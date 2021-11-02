@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import EditProfile from './Components/EditProfile';
 import FollowComponent from './Components/FollowComponent';
 import FollowStackComponent from './Components/FollowStackComponent';
+import ImageViewer from './Components/StackImageViewer';
 const Stack =createStackNavigator();
 
 function App(){
@@ -84,6 +85,7 @@ function App(){
           <Stack.Screen name="EditProfile" component={EditProfile}/>
           <Stack.Screen name="FollowComponent" component={FollowComponent}/>
           <Stack.Screen name="FollowStackComponent" component={FollowStackComponent} options={{headerShown:false}}/>
+          <Stack.Screen name="StackImageViewer" component={ImageViewer} options={{headerShown:false}} />        
         </Stack.Navigator>)}
     </NavigationContainer>
     </AuthContext.Provider>

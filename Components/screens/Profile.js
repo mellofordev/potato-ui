@@ -5,6 +5,7 @@ import ProfileCardComponent from '../ProfileCardComponent';
 import PostComponent from '../PostComponent';
 import { Modalize } from 'react-native-modalize';
 import { AuthContext } from '../AuthContext';
+import { whitegreyshade } from '../defaultValues';
 export default function Profile(){
     const {logout} =useContext(AuthContext);
     const {gettoken}=useContext(AuthContext);  
@@ -23,7 +24,7 @@ export default function Profile(){
 
     return(
     <>    
-    <View style={{flex:1,backgroundColor:'#FCFCFC'}}>
+    <View style={{flex:1,backgroundColor:whitegreyshade}}>
         <Appbar.Header style={{backgroundColor:'#fff'}}>
             <Appbar.Content title={'Your Profile'}/>
             <Appbar.Action icon='account-cog'  style={{right:1}} onPress={()=>{onOpen()}}/>

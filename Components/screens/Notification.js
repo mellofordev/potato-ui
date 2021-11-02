@@ -3,6 +3,7 @@ import {View,TouchableOpacity,FlatList, Alert,Text} from 'react-native';
 import {ActivityIndicator, Appbar, Card,Paragraph} from 'react-native-paper';
 import { Feather } from '@expo/vector-icons';
 import { AuthContext } from '../AuthContext';
+import { blueshade } from '../defaultValues';
 export default function Notification(){
     const [data,setData]=useState([]);
     const [loading,setLoading]=useState(true);
@@ -66,7 +67,7 @@ export default function Notification(){
             }}
             />
             :(
-                <ActivityIndicator size={24}/>
+                <ActivityIndicator size={24} color={blueshade}/>
             )
             }
         </View>

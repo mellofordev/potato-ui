@@ -4,12 +4,14 @@ import { EvilIcons } from '@expo/vector-icons';
 import { Ionicons,Octicons } from '@expo/vector-icons';
 import * as RootNavigation from './RootNavigation';
 import ParsedText from 'react-native-parsed-text';
+import {blackshade, blueshade, lightblueshade, whitegreyshade} from './defaultValues';
 export default function PostCard({item,onOpen,token}){
    
     var uid=item.id;
     var user=item.user;
     const [like,setLike]=useState(item.liked);
     const [like_count,setLikeCount]=useState(item.like_count);
+    const likedby=[2,4,6];
     const onLike =()=>{
         if(like==false){
             setLike(true);
@@ -71,7 +73,7 @@ export default function PostCard({item,onOpen,token}){
                 <View style={styles.postNameContainer}>
                     <Text style={{fontSize:19,marginLeft:15}}>@{item.user}</Text>
                     { item.verified==true &&
-                        <Octicons name="verified" size={17} style={{width:17,height:17,marginLeft:5,marginTop:7}} color="#1DA1F2" />
+                        <Octicons name="verified" size={17} style={{width:17,height:17,marginLeft:5,marginTop:7}} color={lightblueshade} />
                           
                     }
                 </View>
@@ -84,33 +86,48 @@ export default function PostCard({item,onOpen,token}){
                     {pattern: /@(?=.{3,20}(?:\s|$))[a-z][a-z0-9]+(?:[._][a-z0-9]+)?/ig, style: styles.mentiontextusername, onPress:Usernamepress, renderText:renderText},
                 ]}>{item.post}</ParsedText>
                 { item.pic!=null &&
-                    <Image source={{uri:item.pic}}  style={{resizeMode:'contain',width:'100%',height:undefined,aspectRatio:1}}/>
+                   <TouchableOpacity onPress={()=>RootNavigation.push('StackImageViewer',{img:item.pic})}>
+                        <Image source={{uri:item.pic}}  style={{resizeMode:'center',width:'100%',height:undefined,aspectRatio:1,borderRadius:15,marginTop:3,backgroundColor:whitegreyshade}}/>
+                    </TouchableOpacity>
                 }
                 <View style={styles.postIcons}>
                     <View style={{flexDirection:'row'}}>
                         <TouchableOpacity onPress={()=>{onLike();}}>
                         {
                         like==false?    
-                        <Ionicons name="heart-outline" size={26} color="#2C2F33" />
-                        :(<Ionicons name="heart-sharp" size={26} color="#7289DA" />)
+                        <Ionicons name="heart-outline" size={26} color={blackshade} />
+                        :(<Ionicons name="heart-sharp" size={26} color={blueshade} />)
                         }
                         </TouchableOpacity>
-                        <Text style={{color:'#7289DA',marginTop:3}}>{like_count}</Text>
+                        <Text style={{color:blueshade,marginTop:3}}>{like_count}</Text>
                     </View>
                     <View style={{flexDirection:'row'}}>
                         <TouchableOpacity onPress={()=>{RootNavigation.navigate('StackComment',{id:uid,t:token})}}>
-                        <EvilIcons name="comment" size={34} color="#2C2F33" />
+                        <EvilIcons name="comment" size={34} color={blackshade} />
                         </TouchableOpacity>
                         <Text style={{color:'grey',marginTop:3}}>{item.comment_count}</Text>
                         
                     </View>
                     <View style={{flexDirection:'row'}}>
                         <TouchableOpacity onPress={()=>{onOpen()}}>
-                        <EvilIcons name="share-apple" size={34} color="#2C2F33" />
+                        <EvilIcons name="share-apple" size={34} color={blackshade} />
                         </TouchableOpacity>
                         <Text style={{color:'grey',marginTop:3}}>1k</Text>
                     </View>
                 </View>
+                <View style={{marginTop:2,flexDirection:'row'}}>
+                    <Text style={{color:'grey'}}>liked by</Text>
+                    <View style={{flexDirection:'row'}}>
+                    {likedby.map((obj,_k)=>{
+                        return (
+                            <Image source={{uri:'https://punfuel.pythonanywhere.com'+item.user_profile_pic}} style={{borderRadius:55,height:25,width:25,borderColor:whitegreyshade,borderWidth:1,left:-((_k*2)*5)}}/>
+                        );
+                    })    
+                     
+                    
+                    } 
+                    </View> 
+                </View>    
             </View>
         </View>
     </View>
@@ -168,13 +185,13 @@ const styles=StyleSheet.create({
 
     },
     parsedurl:{
-        color:'blue',
+        color:lightblueshade,
         fontWeight:'300'
 
     },
     mentiontextusername:{
-        color:'blue',
-        fontWeight:'500',
+        color:lightblueshade,
+        fontWeight:'600',
         
     }
 

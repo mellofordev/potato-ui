@@ -9,7 +9,14 @@ function Signup({navigation}){
     const [email,setEmail]=useState(null);
     const [password,setPassword]=useState(null);
     const [loading,setLoading]=useState(false);
-    
+    const [secureEntry,setSecureEntry]=useState(true);
+    const toggleShowPassword =()=>{
+        if(secureEntry==false){
+            setSecureEntry(true);
+        }else{
+            setSecureEntry(false);
+        }
+    }
     const apireq =()=>{
         setLoading(true);
         if(username==null || email==null || password==null){
@@ -52,12 +59,7 @@ function Signup({navigation}){
             })
         }
     }
-    const FixedBottom =({children})=>{
-        return(
-        <View style={{position:'absolute',bottom:10,right:0,left:0,marginBottom:16,margin:5}}>
-            {children}
-        </View>);
-    }
+
     return(
         <View style={styles.container}>
             <View>
@@ -69,7 +71,7 @@ function Signup({navigation}){
                     <View>
                         <TextInput style={styles.input} label="username" theme={{colors:{primary:'#7289DA',text:'#23272A'}}} mode='flat' value={username} onChangeText={username=>setUsername(username)} />
                         <TextInput style={styles.input} label="email" theme={{colors:{primary:'#7289DA',text:'#23272A'}}} mode='flat' value={email} onChangeText={email=>setEmail(email)} />
-                        <TextInput style={styles.input} label="password"  theme={{colors:{primary:'#7289DA',text:'#23272A'}}} mode='flat' value={password} onChangeText={password=>setPassword(password)} secureTextEntry={true} />
+                        <TextInput style={styles.input} label="password"  theme={{colors:{primary:'#7289DA',text:'#23272A'}}} mode='flat' value={password} onChangeText={password=>setPassword(password)} secureTextEntry={secureEntry} right={<TextInput.Icon name={secureEntry==true?'eye-off' : 'eye'} color={'grey'} onPress={()=>{toggleShowPassword()}}/>}/>
                         
                     </View>
                     <View>

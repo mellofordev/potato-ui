@@ -1,33 +1,11 @@
-import React,{useRef,useEffect,useState, useContext} from 'react';
-import {View,StyleSheet,Image,Text,FlatList, TouchableOpacity,} from 'react-native';
-import {Appbar,Card,Title} from 'react-native-paper';
+import React,{useRef, useContext} from 'react';
+import {View,StyleSheet,Image,Text} from 'react-native';
+import {Appbar,Title} from 'react-native-paper';
 import PostComponent from '../PostComponent';
 import { Modalize } from 'react-native-modalize';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AuthContext} from '../AuthContext';
 
-const categories =[
-    {
-        id:1,
-        category:'11cbruh',
 
-    },
-    {
-        id:2,
-        category:'Funny.me',
-        
-    },
-    {
-        id:3,
-        category:'thisisjustforfunandpun',
-        
-    },
-    {
-        id:4,
-        category:'kindcoolmemerhere',
-        
-    },
-];
 
 export default function Home(){
     
@@ -54,41 +32,21 @@ export default function Home(){
 
           <View style={styles.container}>
          {gettoken()!=null &&   
-         <PostComponent apiUrl='https://punfuel.pythonanywhere.com/api/home?limit=' 
+         <View>
+            
+         <PostComponent apiUrl='https://punfuel.pythonanywhere.com/api/home?limit=10' 
          onOpen={onOpen}
-         topheader={()=>{
-                     return(
-                        <View style={{flexDirection:'column'}}>
-                                    <Title style={{marginLeft:5,}}>Cool new people.</Title>
-                                    <FlatList
-                                    data={categories}
-                                    keyExtractor={({id})=>id.toString()}
-                                    
-                                    renderItem={({item})=>{
-                                        return(
-                                        <View style={styles.CategoryButton}>
-                                            <Image source={{uri:'https://punfuel.pythonanywhere.com/media/default.png/'}} style={{borderRadius:8,height:55,width:55}}/>
-                                            <View style={{flexDirection:'column'}}>
-                                            <Text style={{margin:2,fontSize:13,color:'#FCFCFC',textAlign:'center'}}>{(item.category).length<=20 ?item.category  :( (item.category).slice(0,18)+'...')}</Text>
-                                            <TouchableOpacity>
-                                            <Text style={{marginLeft:3,color:'#7289DA'}}>Follow</Text>
-                                            </TouchableOpacity>
-                                            </View>
-                                        </View>
-                                        
-                                        );
-                                    }}
-                                    horizontal={true}
-                                    showsHorizontalScrollIndicator={false}
-                                    />
-
-                        
-                        </View>
-                        );
-         }}
-         issticky={[0]}
          item={gettoken()}
-         />} 
+         topheader={()=>{
+             return(
+                <View style={{flexDirection:'column',flex:1}}>
+                 <Title style={{marginLeft:5,}}>Feed.</Title>  
+                </View>
+             );
+         }}
+         />
+         </View>
+         }
          </View>  
         </View>
         
@@ -122,22 +80,7 @@ const styles=StyleSheet.create({
         
         
    }, 
-   Category:{
-       margin:0,
-       
-   }, 
-   CategoryButton:{
-    height:55,
-    flexDirection:'row',
-    backgroundColor:'#2C2F33',
-    borderRadius:8,
-    marginTop:5,
-    width:150,
-    marginLeft:8,
-    marginBottom:5,
-    elevation:4,
-    
-   },
+
    shareFont:{
        fontSize:25,
        fontWeight:'bold',

@@ -46,7 +46,7 @@ export default function FollowStackComponent({navigation,route}){
             {
             followData.map((id,index)=>{
                 return(
-                <View style={{flexDirection:'column',marginTop:5}}>
+                <View style={{flexDirection:'column',marginTop:5}} key={index}>
                     <TouchableOpacity style={{flexDirection:'row',marginLeft:10}} onPress={()=>{navigation.push('StackProfile',{username:id.user,t:route.params.token})}}>
                         <Image source={{uri:'https://punfuel.pythonanywhere.com'+id.user_profile_pic}} style={{height:55,width:55,borderRadius:10,borderColor:'#fffaf0',borderWidth:1}}/>
                         <View style={{flexDirection:'row',marginTop:5,marginBottom:2}}>

@@ -9,14 +9,12 @@ export default function FooterComponent(){
         return new Promise(resolve=>setTimeout(resolve,timeout))
     }
     useEffect(()=>{
-        const abortControl = new AbortController();
+        
         setLoading(true);
         wait(2000).then(()=>{
             setLoading(false);
-        });
-        return ()=>{
-            abortControl.abort();
-        };
+        })
+        
     },[])
     return(
     

@@ -1,5 +1,5 @@
 import React,{useRef,useContext,useState, useEffect} from 'react';
-import {View,TouchableOpacity,Text, Alert} from 'react-native';
+import {View,TouchableOpacity,Text, Alert,ScrollView} from 'react-native';
 import { Appbar,Divider } from 'react-native-paper';
 import ProfileCardComponent from '../ProfileCardComponent';
 import PostComponent from '../PostComponent';
@@ -21,7 +21,13 @@ export default function Profile(){
 
         ],{cancelable:true});
     }
-
+    useEffect(()=>{
+    const abortControl = new AbortController();
+      return ()=>{
+        
+        abortControl.abort();
+      };
+    },[])
     return(
     <>    
     <View style={{flex:1,backgroundColor:whitegreyshade}}>
@@ -29,24 +35,25 @@ export default function Profile(){
             <Appbar.Content title={'Your Profile'}/>
             <Appbar.Action icon='account-cog'  style={{right:1}} onPress={()=>{onOpen()}}/>
         </Appbar.Header>
+        <ScrollView>
+  
+        <PostComponent apiUrl={'https://punfuel.pythonanywhere.com/api/userpost/?limit=10'} 
         
-        <PostComponent apiUrl={'https://punfuel.pythonanywhere.com/api/userpost/?limit='} 
-          topheader={()=>{
-              
-           return(
+           
+           item={gettoken()} 
+           onOpen={onOpen}
+           topheader={()=>{
+               return(
             <View style={{flex:1}}>   
                 <ProfileCardComponent  item={gettoken()}
                 
 
                 />
-           </View>
-            );
+           </View>  
+               );
            }}
-           issticky={0.1}
-           item={gettoken()} 
-           onOpen={onOpen}
-           
         />
+        </ScrollView>
     
     </View>
     <Modalize snapPoint={300} modalHeight={500} ref={modalizeRef}

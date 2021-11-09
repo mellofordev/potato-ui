@@ -99,8 +99,9 @@ export default function ProfileCardComponent({setTabRender,tabRender,item,url='h
     },[]);
         
         return(
-            
-               <View>
+            <View>
+               {data!='Profile not found'?
+                   <View>
                    
                     <Card style={{marginTop:5}}>
             
@@ -131,7 +132,9 @@ export default function ProfileCardComponent({setTabRender,tabRender,item,url='h
                                     <Text>followed by </Text>
                                     {mutualFriends.map((item)=>{
                                        return(
+                                           <View key={item}>
                                             <Text style={{fontWeight:'bold'}}>{item} </Text>
+                                           </View> 
                                        );
                                     }
                                     )}
@@ -185,6 +188,11 @@ export default function ProfileCardComponent({setTabRender,tabRender,item,url='h
                         </View>
 
                     }
+                </View>
+                :(
+                    <Title style={{textAlign:'center',color:'grey'}}>{data}</Title>
+                )
+            }
                 </View>
 
         );

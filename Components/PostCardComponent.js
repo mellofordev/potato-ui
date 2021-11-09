@@ -1,16 +1,19 @@
-import React,{useState} from 'react';
+import React,{useContext, useState} from 'react';
 import {View,StyleSheet,Image,Text,TouchableOpacity, Alert,Dimensions,Linking} from 'react-native';
 import { EvilIcons } from '@expo/vector-icons';
 import { Ionicons,Octicons } from '@expo/vector-icons';
 import * as RootNavigation from './RootNavigation';
 import ParsedText from 'react-native-parsed-text';
 import {blackshade, blueshade, lightblueshade, whitegreyshade} from './defaultValues';
-export default function PostCard({item,onOpen,token}){
+import { AuthContext } from './AuthContext';
+export default function PostCard({item,onOpen,token,key}){
    
-    var uid=item.id;
+    var uid=item.shareable_link;
     var user=item.user;
     const [like,setLike]=useState(item.liked);
     const [like_count,setLikeCount]=useState(item.like_count);
+    const {gettoken} =useContext(AuthContext);
+    const received_token =gettoken();
     const likedby=[2,4,6];
     const onLike =()=>{
         if(like==false){
@@ -62,12 +65,12 @@ export default function PostCard({item,onOpen,token}){
     }
     return(
      
-    <View style={styles.container}>
+    <View style={styles.container} key={key}>
          
     <View style={styles.postContainer}>
         <View style={{margin:5}}>
             <View style={styles.postHeader}>
-                <TouchableOpacity onPress={()=>RootNavigation.navigate('StackProfile',{username:item.user,t:token})}>
+                <TouchableOpacity onPress={()=>RootNavigation.navigate('StackProfile',{username:item.user,t:gettoken()})}>
                 <Image source={{uri:'https://punfuel.pythonanywhere.com'+item.user_profile_pic}} style={{borderRadius:15,height:55,width:55,borderColor:'#fffaf0',borderWidth:1}}  />
                 </TouchableOpacity>
                 <View style={styles.postNameContainer}>
@@ -102,7 +105,7 @@ export default function PostCard({item,onOpen,token}){
                         <Text style={{color:blueshade,marginTop:3}}>{like_count}</Text>
                     </View>
                     <View style={{flexDirection:'row'}}>
-                        <TouchableOpacity onPress={()=>{RootNavigation.navigate('StackComment',{id:uid,t:token})}}>
+                        <TouchableOpacity onPress={()=>{RootNavigation.navigate('StackComment',{id:uid,t:gettoken()})}}>
                         <EvilIcons name="comment" size={34} color={blackshade} />
                         </TouchableOpacity>
                         <Text style={{color:'grey',marginTop:3}}>{item.comment_count}</Text>
@@ -115,12 +118,14 @@ export default function PostCard({item,onOpen,token}){
                         <Text style={{color:'grey',marginTop:3}}>1k</Text>
                     </View>
                 </View>
-                <View style={{marginTop:2,flexDirection:'row'}}>
+                <View style={{marginTop:5,flexDirection:'row'}}>
                     <Text style={{color:'grey'}}>liked by</Text>
                     <View style={{flexDirection:'row'}}>
                     {likedby.map((obj,_k)=>{
                         return (
-                            <Image source={{uri:'https://punfuel.pythonanywhere.com'+item.user_profile_pic}} style={{borderRadius:55,height:25,width:25,borderColor:whitegreyshade,borderWidth:1,left:-((_k*2)*5)}}/>
+                            <View key={_k}>
+                                <Image source={{uri:'https://punfuel.pythonanywhere.com'+item.user_profile_pic}} style={{borderRadius:55,height:25,width:25,borderColor:whitegreyshade,borderWidth:1,left:-((_k*2)*5)}}/>
+                            </View>
                         );
                     })    
                      

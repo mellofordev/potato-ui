@@ -55,13 +55,15 @@ function App(){
     login:(get_token)=>{
       storeToken(get_token);
       
-
     },
     signup:(get_tokens)=>{
       storeToken(get_tokens);
     },
     logout:()=>{
+      
       removeToken();
+      
+      
     },
     gettoken:()=>{
       getToken();

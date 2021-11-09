@@ -19,6 +19,7 @@ function Login({navigation}){
         }
     }
     const apirequest =()=>{
+        console.log('login');
         if(username==null || password==null){
             Alert.alert('Username and password is required');
             setLoading(false);

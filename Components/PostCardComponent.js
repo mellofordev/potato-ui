@@ -123,7 +123,7 @@ export default function PostCard({item,onOpen,token,key}){
                     <Text style={{color:'grey'}}>liked by</Text>
                     <TouchableOpacity style={{flexDirection:'row'}} onPress={()=>{console.log('press')}}>
                     {likedby.slice(0,3).map((obj,_k)=>{
-                        console.log(obj);
+                        
                         return (
                             <View key={_k}>
                                 <Image source={{uri:'https://punfuel.pythonanywhere.com'+obj.pic}} style={{borderRadius:55,height:25,width:25,borderColor:whitegreyshade,borderWidth:1,left:-((_k*2)*5)}}/>

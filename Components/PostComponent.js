@@ -3,7 +3,7 @@ import {View, ActivityIndicator, RefreshControl,Alert,FlatList,Text,ScrollView,S
 import PostCard from './PostCardComponent';
 import FooterComponent from './FooterComponent';
 import { blackshade, whitegreyshade } from './defaultValues';
-
+import * as RootNavigation from './RootNavigation';
 export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item}){
     const [isLoading,setIsLoading]=useState(false);
     const [data,setData]=useState([]);
@@ -11,28 +11,7 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
     const [isRefreshing,setIsRefreshing]=useState(false);
     const recieved_token=item;
     const [next,setNext]=useState(null);
-    const categories =[
-        {
-            id:1,
-            category:'11cbruh',
-    
-        },
-        {
-            id:2,
-            category:'Funny.me',
-            
-        },
-        {
-            id:3,
-            category:'thisisjustforfunandpun',
-            
-        },
-        {
-            id:4,
-            category:'kindcoolmemerhere',
-            
-        },
-    ];
+    const [suggestionBucket,setSuggestionBucket]=useState([]);
     const apirequest =()=>{
         
         fetch(apiUrl,{
@@ -69,8 +48,28 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
         })
         
     }
+    const usersuggestionApi=()=>{
+        fetch('https://punfuel.pythonanywhere.com/api/suggestions/',{
+            method:'GET',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json',
+                'Authorization':'Token '+recieved_token,
+
+            }
+        })
+        .then(response=>response.json())
+        .then(data=>{
+            setSuggestionBucket(data.suggestions);
+            console.log(data.suggestions);
+        })
+        .catch(e=>{
+            console.log(e);
+        })
+    } 
     useEffect(()=>{
         apirequest();
+        usersuggestionApi();
         const abortControl=new AbortController();
         return ()=>{
             abortControl.abort();
@@ -116,7 +115,7 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
         return layoutMeasurement.height + contentOffset.y >=
           contentSize.height - paddingToBottom;
       };*/
-     
+
     return(
         <View> 
         {!isLoading ? <ActivityIndicator size={44} color='#7289DA' style={{marginTop:12}}/> :(
@@ -132,17 +131,24 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
                 <View>
                     <Text style={{marginLeft:5,color:'grey',fontSize:20}}>Cool new people</Text>
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                        {categories.map((item)=>{
+                        {suggestionBucket==[] && 
+                         <View>
+                             <Text>Get started</Text>
+                         </View>    
+                        }
+                        {suggestionBucket.map((item,k)=>{
                             return(
-                                <View key={item.id} style={{justifyContent:'space-between',margin:5}}>
-                                            
+                                
+                                <View key={k} style={{justifyContent:'space-between',margin:5}}>
+                                            <TouchableOpacity onPress={()=>{RootNavigation.push('StackProfile',{username:item.user,t:recieved_token})}}>
                                             <View style={{flexDirection:'column',backgroundColor:'white',height:150,width:150,marginLeft:5,justifyContent:'center',alignItems:'center',elevation:1,borderRadius:5}}>
-                                            <Image source={{uri:'https://punfuel.pythonanywhere.com/media/default.png/'}} style={{borderRadius:8,height:99,width:99}}/>
-                                            <Text style={{fontSize:18,color:blackshade,textAlign:'center'}}>{(item.category).length<=15 ?item.category  :( (item.category).slice(0,10)+'...')}</Text>
+                                            <Image source={{uri:`https://punfuel.pythonanywhere.com/${item.user_profile_pic}`}} style={{borderRadius:8,height:99,width:99}}/>
+                                            <Text style={{fontSize:18,color:blackshade,textAlign:'center'}}>{(item.user).length<=15 ?item.user  :( (item.user).slice(0,10)+'...')}</Text>
                                             <TouchableOpacity>
                                             <Text style={{marginLeft:3,color:'#7289DA',textAlign:'center'}}>Follow</Text>
                                             </TouchableOpacity>
                                             </View>
+                                            </TouchableOpacity>
                                 </View>
                             );
                         })}

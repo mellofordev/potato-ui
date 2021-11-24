@@ -28,7 +28,7 @@ export default function FollowStackComponent({navigation,route}){
     },[]);
     return(
         <View style={{backgroundColor:'#ffff',height:'100%'}}>
-        <Appbar.Header style={{backgroundColor:'#fff'}}>
+        <Appbar.Header style={{backgroundColor:'#fff',elevation:0}}>
             <Appbar.BackAction  onPress={()=>{navigation.goBack(null)}}/>
             <Appbar.Content title={route.params.type}/>
         </Appbar.Header>    

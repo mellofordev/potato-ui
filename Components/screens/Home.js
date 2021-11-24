@@ -1,10 +1,10 @@
 import React,{useRef, useContext} from 'react';
 import {View,StyleSheet,Image,Text} from 'react-native';
-import {Appbar,Title} from 'react-native-paper';
+import {Appbar,Divider,Title} from 'react-native-paper';
 import PostComponent from '../PostComponent';
 import { Modalize } from 'react-native-modalize';
 import {AuthContext} from '../AuthContext';
-
+import {whitegreyshade} from '../defaultValues';
 
 
 export default function Home(){
@@ -21,13 +21,13 @@ export default function Home(){
     return(
     <>
     <View>
-        <Appbar.Header style={{backgroundColor:'#FCFCFC'}}>
+        <Appbar.Header style={{backgroundColor:'#fff',elevation:0}}>
             <Appbar.Content title={<Image source={{uri:'https://i.ibb.co/SKqmC0Y/maskable-icon.png'}} style={{height:55,width:55,borderRadius:15}}/>} titleStyle={{height:100}}/>
             
         </Appbar.Header>   
+        <Divider/>
         
-        
-        <View style={{height:'100%',backgroundColor:'#FCFCFC'}}>
+        <View style={{height:'100%',backgroundColor:'#fff'}}>
          
 
           <View style={styles.container}>
@@ -40,7 +40,7 @@ export default function Home(){
          topheader={()=>{
              return(
                 <View style={{flexDirection:'column',flex:1}}>
-                 <Title style={{marginLeft:5,}}>Feed.</Title>  
+                  <Title>Feed.</Title>
                 </View>
              );
          }}

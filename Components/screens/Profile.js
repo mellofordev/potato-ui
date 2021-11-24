@@ -31,10 +31,11 @@ export default function Profile(){
     return(
     <>    
     <View style={{flex:1,backgroundColor:whitegreyshade}}>
-        <Appbar.Header style={{backgroundColor:'#fff'}}>
+        <Appbar.Header style={{backgroundColor:'#fff',elevation:0}}>
             <Appbar.Content title={'Your Profile'}/>
             <Appbar.Action icon='account-cog'  style={{right:1}} onPress={()=>{onOpen()}}/>
         </Appbar.Header>
+        <Divider/>
         <ScrollView>
   
         <PostComponent apiUrl={'https://punfuel.pythonanywhere.com/api/userpost/?limit=10'} 

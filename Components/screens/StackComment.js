@@ -6,6 +6,7 @@ import RButton from '../RButtonComponent';
 import { Feather } from '@expo/vector-icons';
 import FooterComponent from '../FooterComponent';
 import { FixedBottom } from '../FixedBottomComponent';
+import * as RootNavigation from '../RootNavigation';
 export default function StackComment({route}){
     const [isloading,setIsLoading]=useState(false);
     const [error,setError]=useState();
@@ -121,8 +122,9 @@ export default function StackComment({route}){
              return(
                 <View style={styles.bottomsheetcontainer} key={item}>
                 <View style={styles.box}>
+                    <TouchableOpacity onPress={()=>{RootNavigation.push('StackProfile',{username:data[item].user,t:token})}}>
                     <Image style={{marginRight:15,height:45,width:45,borderRadius:10}} source={{uri:'https://punfuel.pythonanywhere.com/media/'+data[item].profile_pic}}/>
-                    
+                    </TouchableOpacity>
                     <Text style={{marginRight:3,color:'#23272A',fontWeight:'900',fontFamily:'Roboto'}}>{(data[item].user).length>10 ?(data[item].user).slice(0,10)+'...':((data[item].user))}</Text>
                     {data[item].verified==true &&
                     <Image style={{width:16,height:16,marginTop:3,marginLeft:3}} source={{uri:'https://s3-us-west-2.amazonaws.com/s.cdpn.io/1211695/twitter_verified.png'}}/>

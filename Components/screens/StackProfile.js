@@ -1,6 +1,6 @@
 import React from 'react';
 import {View,ScrollView} from 'react-native';
-import { Appbar } from 'react-native-paper';
+import { Appbar, Divider } from 'react-native-paper';
 import ProfileCardComponent from '../ProfileCardComponent';
 import PostComponent from '../PostComponent';
 
@@ -11,11 +11,11 @@ export default function StackProfile({navigation,route}){
 
     return( 
     <View style={{flex:1,backgroundColor:'#FCFCFC'}}>
-        <Appbar.Header style={{backgroundColor:'#fff'}}>
+        <Appbar.Header style={{backgroundColor:'#fff',elevation:0}}>
             <Appbar.BackAction  onPress={()=>{navigation.goBack(null)}}/>
             <Appbar.Content title={user}/>
         </Appbar.Header>
-        
+        <Divider/>
     
        
         <View>  

@@ -1,6 +1,6 @@
 import React, { useState,useContext,useEffect } from 'react';
 import {View,TouchableOpacity,FlatList, Alert,Text} from 'react-native';
-import {ActivityIndicator, Appbar, Card,Paragraph} from 'react-native-paper';
+import {ActivityIndicator, Appbar, Card,Divider,Paragraph} from 'react-native-paper';
 import { Feather } from '@expo/vector-icons';
 import { AuthContext } from '../AuthContext';
 import { blueshade } from '../defaultValues';
@@ -30,7 +30,7 @@ export default function Notification(){
     },[data])
     return(
         <View style={{backgroundColor:'#FCFCFC',height:'100%'}}>
-            <Appbar.Header style={{backgroundColor:'#fff'}}>
+            <Appbar.Header style={{backgroundColor:'#fff',elevation:0}}>
                 <Appbar.Content title="Notification"/>
                 <Appbar.Content 
                     title={
@@ -41,6 +41,7 @@ export default function Notification(){
                     style={{left:130,marginTop:3}}
                 />
             </Appbar.Header>
+            <Divider/>
             {loading ==false ?
             <FlatList 
             data={data}

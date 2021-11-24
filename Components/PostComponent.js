@@ -4,6 +4,7 @@ import PostCard from './PostCardComponent';
 import FooterComponent from './FooterComponent';
 import { blackshade, whitegreyshade } from './defaultValues';
 import * as RootNavigation from './RootNavigation';
+import { Title } from 'react-native-paper';
 export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item}){
     const [isLoading,setIsLoading]=useState(false);
     const [data,setData]=useState([]);
@@ -27,9 +28,11 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
         })
         .then(response=>response.json())
         .then(data=>{
+            console.log(data);
             if(data.results.feed){
                     
                 setData(data.results.feed);
+                
                 
             }else{
                 
@@ -43,7 +46,7 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
         })
         .catch(error=>{
             setError(error);
-            Alert.alert('Network error');
+            Alert.alert('Network error','Try closing and reopen the app');
             setIsLoading(true);
         })
         
@@ -61,7 +64,7 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
         .then(response=>response.json())
         .then(data=>{
             setSuggestionBucket(data.suggestions);
-            console.log(data.suggestions);
+            
         })
         .catch(e=>{
             console.log(e);
@@ -117,9 +120,10 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
       };*/
 
     return(
-        <View> 
+        <View>
+            
         {!isLoading ? <ActivityIndicator size={44} color='#7289DA' style={{marginTop:12}}/> :(
-          
+        
         <FlatList
             data={data}
             
@@ -130,12 +134,12 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
                 {index==2&& 
                 <View>
                     <Text style={{marginLeft:5,color:'grey',fontSize:20}}>Cool new people</Text>
+                    {suggestionBucket==[] && 
+                        
+                        <Text>Get started</Text>     
+                    }
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                        {suggestionBucket==[] && 
-                         <View>
-                             <Text>Get started</Text>
-                         </View>    
-                        }
+                        
                         {suggestionBucket.map((item,k)=>{
                             return(
                                 

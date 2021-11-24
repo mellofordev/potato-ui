@@ -14,12 +14,12 @@ export default function PostCard({item,onOpen,token,key}){
     const [like_count,setLikeCount]=useState(item.like_count);
     const {gettoken} =useContext(AuthContext);
     const received_token =gettoken();
-    const likedby=[2,4,6];
+    const likedby=item.fresh_likes.likes;
     const onLike =()=>{
         if(like==false){
             setLike(true);
             setLikeCount(like_count+1);
-            fetch('https://punfuel.pythonanywhere.com/api/like/'+item.id+'/',{
+            fetch('https://punfuel.pythonanywhere.com/api/like/'+item.shareable_link+'/',{
                 method:'GET',
                 headers:{
                     'Content-Types':'application/json',
@@ -34,7 +34,7 @@ export default function PostCard({item,onOpen,token,key}){
         }else{
             setLikeCount(like_count-1);
             setLike(false);
-            fetch('https://punfuel.pythonanywhere.com/api/unlike/'+item.id+'/',{
+            fetch('https://punfuel.pythonanywhere.com/api/unlike/'+item.shareable_link+'/',{
                 method:'Delete',
                 headers:{
                     'Content-Types':'application/json',
@@ -118,21 +118,24 @@ export default function PostCard({item,onOpen,token,key}){
                         <Text style={{color:'grey',marginTop:3}}>1k</Text>
                     </View>
                 </View>
+                {likedby!=[] &&
                 <View style={{marginTop:5,flexDirection:'row'}}>
                     <Text style={{color:'grey'}}>liked by</Text>
-                    <View style={{flexDirection:'row'}}>
-                    {likedby.map((obj,_k)=>{
+                    <TouchableOpacity style={{flexDirection:'row'}} onPress={()=>{console.log('press')}}>
+                    {likedby.slice(0,3).map((obj,_k)=>{
+                        console.log(obj);
                         return (
                             <View key={_k}>
-                                <Image source={{uri:'https://punfuel.pythonanywhere.com'+item.user_profile_pic}} style={{borderRadius:55,height:25,width:25,borderColor:whitegreyshade,borderWidth:1,left:-((_k*2)*5)}}/>
+                                <Image source={{uri:'https://punfuel.pythonanywhere.com'+obj.pic}} style={{borderRadius:55,height:25,width:25,borderColor:whitegreyshade,borderWidth:1,left:-((_k*2)*5)}}/>
                             </View>
                         );
                     })    
                      
                     
                     } 
-                    </View> 
-                </View>    
+                    </TouchableOpacity> 
+                </View>  
+                }  
             </View>
         </View>
     </View>

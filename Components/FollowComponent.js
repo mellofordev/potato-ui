@@ -1,7 +1,6 @@
 import React from 'react';
-import {View,Text,Image,FlatList} from 'react-native';
-import RButton from './RButtonComponent';
-import { Title } from 'react-native-paper';
+import {View,Text} from 'react-native';
+
 export default function FollowComponent({item}){
 
     return(

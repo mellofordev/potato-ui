@@ -28,7 +28,7 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
         })
         .then(response=>response.json())
         .then(data=>{
-            console.log(data);
+            
             if(data.results.feed){
                     
                 setData(data.results.feed);

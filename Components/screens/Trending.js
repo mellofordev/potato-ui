@@ -8,16 +8,17 @@ export default function Trending(){
     return(
         
 
-        <View style={{flex:1}}>
-        <Appbar.Header style={{backgroundColor:'#fff'}}>
+        <View style={{height:'100%',backgroundColor:'#fff'}}>
+        <Appbar.Header style={{backgroundColor:'#fff',elevation:0}}>
           
           <Appbar.Content 
           title={<Searchbar placeholder='Search ' onChangeText={(q)=>{setUserInput(q)}} value={userinput} style={{marginBottom:3,borderRadius:10,width:300}}/>}  
-          titleStyle={{position:'relative',right:0,left:6}}
+          titleStyle={{position:'relative',right:0,left:6,elevation:0}}
+          
           />
         </Appbar.Header>
         <View style={styles.container}>
-        <PostComponent apiUrl={'https://punfuel.pythonanywhere.com/api/home?limit='} 
+        <PostComponent apiUrl='https://punfuel.pythonanywhere.com/api/home?limit=10'
             topheader={()=>{
                 return(
                     <View>
@@ -47,6 +48,6 @@ const styles=StyleSheet.create({
         flexDirection:'column',
         justifyContent:'center',
         marginTop:5,
-        height:'100%'
+        
     }
 });

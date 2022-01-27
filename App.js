@@ -24,7 +24,7 @@ function App(){
   const storeToken = async (value) => {
     try {
       await AsyncStorage.setItem('token', value)
-      setToken(true);
+      setToken(value);
     } catch (e) {
       // saving error
     }
@@ -71,6 +71,7 @@ function App(){
     },
 
   })); 
+     
      return(
       <AuthContext.Provider value={context}>
       <NavigationContainer ref={navigationRef}>

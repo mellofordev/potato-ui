@@ -1,4 +1,4 @@
-import React,{useRef, useContext} from 'react';
+import React,{useRef, useContext, useEffect,useState} from 'react';
 import {View,StyleSheet,Image,Text} from 'react-native';
 import {Appbar,Divider,Title} from 'react-native-paper';
 import PostComponent from '../PostComponent';
@@ -10,14 +10,13 @@ import {whitegreyshade} from '../defaultValues';
 export default function Home(){
     
     const {gettoken}=useContext(AuthContext);
-
     const modalizeRef = useRef(null);
     //const [token,setToken]=useState(null);
 
     const onOpen=()=>{
         modalizeRef.current?.open()
     } 
-
+    
     return(
     <>
     <View>
@@ -39,7 +38,7 @@ export default function Home(){
          item={gettoken()}
          topheader={()=>{
              return(
-                <View style={{flexDirection:'column',flex:1}}>
+                <View style={{flexDirection:'column',flex:1,marginLeft:3}}>
                   <Title>Feed.</Title>
                 </View>
              );

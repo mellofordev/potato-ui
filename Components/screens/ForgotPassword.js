@@ -1,28 +1,17 @@
 import React from "react";
-import {View,Text,StyleSheet, Pressable} from 'react-native';
-import { Title,TextInput,Button as RButton } from "react-native-paper";
+import {View,StyleSheet} from 'react-native';
+import { ActivityIndicator } from "react-native-paper";
+import {WebView} from 'react-native-webview';
+import { blueshade } from "../defaultValues";
 export default function ForgotPassword(){
-    const [send,setSend]=React.useState(false);
-    const [email,setEmail]=React.useState('');
-    const [msg,setMsg]=React.useState({main:false,label:'Enter your email linked with your account'});
-    const _handleMsg=()=>{
-        setMsg({main:true,label:'We have send you an email with password reset link!'})
-    }
+    const [loading,setLoading]=React.useState(false);
     return(
         <View style={styles.container}>
-            <View style={{margin:15}}>
-                <Title style={{fontSize:25,fontWeight:'600'}}>{msg.label}</Title>
-                {msg.main==false &&
-                  <View>
-                      <TextInput style={{marginTop:15}}  label="email" theme={{colors:{primary:'#7289DA',text:'#23272A'}}} mode='flat' value={email} onChangeText={email=>setEmail(email)} />
-                  <RButton style={{marginBottom:25,height:50,borderRadius:55,marginTop:15,elevation:0}} mode='contained' color='#7289DA' disabled={false}  onPress={()=>{_handleMsg()}}>
-                    <Title style={{color:'white',fontStyle:'normal',textTransform:'none'}}>Send</Title>
-               </RButton>
-                  </View>    
-                }
-               
-                
-            </View>
+            {loading==false &&
+              <ActivityIndicator style={{marginTop:50}} size={24} color={blueshade} />
+              
+            }
+             <WebView onLoad={()=>{setLoading(true)}} source={{uri:'https://punfuel.pythonanywhere.com/accounts/reset_password/'}}/>
             
         </View>
     );

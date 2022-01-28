@@ -15,6 +15,7 @@ import EditProfile from './Components/EditProfile';
 import FollowComponent from './Components/FollowComponent';
 import FollowStackComponent from './Components/FollowStackComponent';
 import ImageViewer from './Components/StackImageViewer';
+import ForgotPassword from './Components/screens/ForgotPassword';
 const Stack =createStackNavigator();
 
 function App(){
@@ -78,7 +79,8 @@ function App(){
       {token==null ?
       <Stack.Navigator>
          <Stack.Screen options={{headerTitle:()=><Image source={{uri:'https://i.ibb.co/SKqmC0Y/maskable-icon.png'}} style={{width:50,resizeMode: 'contain', height:56,borderRadius:15}}/>}} name="Login" component={Login}/>
-         <Stack.Screen name="Signup" component={Signup}/>
+         <Stack.Screen name="Signup" component={Signup} options={{headerStyle:{elevation:0}}}/>
+         <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{headerStyle:{elevation:0}}} />
       </Stack.Navigator>
       :(
       <Stack.Navigator>

@@ -77,7 +77,7 @@ function Login({navigation}){
                 </Card.Content>
             </Card>
             <View style={styles.footer}>
-                <RButton mode='outlined'  color='#23272A' style={{marginRight:6,borderRadius:12}} >Forgot password?</RButton>
+                <RButton mode='outlined'  color='#23272A' style={{marginRight:6,borderRadius:12}} onPress={()=>navigation.navigate('ForgotPassword')}>Forgot password?</RButton>
                 <RButton mode='outlined' color='#23272A' style={{marginRight:6,borderRadius:12}} onPress={()=>navigation.navigate('Signup')}>Join now</RButton>
             </View>            
             

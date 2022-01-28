@@ -105,11 +105,7 @@ export default function StackComment({route}){
         <View style={styles.container}>
          {!isloading && <ActivityIndicator size={24} color='#7289DA' style={{marginTop:35}}/> }
          {data==[] && <EmptyComment/>}
-         <ScrollView onScroll={({nativeEvent})=>{
-             if(isCloseToBottom){
-                 console.log('fetchmore');
-             }
-         }}
+         <ScrollView 
          refreshControl={
             <RefreshControl 
             enabled={true} 
@@ -190,12 +186,12 @@ export default function StackComment({route}){
 
 const styles =StyleSheet.create({
     container:{
-        marginTop:10,
+        
         flexDirection:'column',
         justifyContent:'center',
         backgroundColor:'#fff',
         flex:1,
-        borderRadius:10,
+        
         
 
     },

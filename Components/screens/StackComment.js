@@ -7,6 +7,7 @@ import { Feather } from '@expo/vector-icons';
 import FooterComponent from '../FooterComponent';
 import { FixedBottom } from '../FixedBottomComponent';
 import * as RootNavigation from '../RootNavigation';
+import { FlatList } from 'react-native-gesture-handler';
 export default function StackComment({route}){
     const [isloading,setIsLoading]=useState(false);
     const [error,setError]=useState();
@@ -15,8 +16,10 @@ export default function StackComment({route}){
     const [btn,setBtn]=useState(false);
     const [isRefreshing,setIsRefreshing]=useState(false);
     const modalizeRef = useRef(null);
+    const [stickers,setStickers]=useState([]);
     const onOpen=()=>{
-        modalizeRef.current?.open()
+        modalizeRef.current?.open();
+        stickerApi();
     } 
     const get_width=Dimensions.get('window').width;
     const val =route.params.id;
@@ -40,7 +43,7 @@ export default function StackComment({route}){
         })
         .catch(error=>{setError(error)})
     }
-    const postreq=()=>{
+    const postreq=(type_sticker=false,refer_sticker_id=0)=>{
         
         setBtn(true);
         fetch('https://punfuel.pythonanywhere.com/api/comment/'+route.params.id+'/',{
@@ -52,14 +55,16 @@ export default function StackComment({route}){
 
             },
             body:JSON.stringify({
-                    comment:text
-                    
-                })
+                comment: type_sticker==true ? null :text,
+                sticker:type_sticker,
+                sticker_id:refer_sticker_id
+            })
             
         })
         .then(response=>response.json())
         .then(data=>{
             setBtn(false);
+            console.log(data);
             Alert.alert(data.comments);
             setText('');
             wait(200).then(()=>{
@@ -70,6 +75,22 @@ export default function StackComment({route}){
             Alert.alert('Network error');
             setBtn(false);
             
+        })
+    }
+    const stickerApi=()=>{
+        fetch('https://punfuel.pythonanywhere.com/api/stickers/',{
+            method:'GET',
+            headers:{
+                'Authorization':`Token ${route.params.t}`,
+                'Content-Type':'application/json'
+            }
+        })
+        .then(response=>response.json())
+        .then((data)=>{
+            setStickers(data.stickers);
+        })
+        .catch(error=>{
+            console.log(error);
         })
     }
     useEffect(()=>{apireq();},[])
@@ -100,6 +121,7 @@ export default function StackComment({route}){
         return layoutMeasurement.height + contentOffset.y >=
           contentSize.height - paddingToBottom;
       };
+    
     return(
         <>
         <View style={styles.container}>
@@ -112,7 +134,8 @@ export default function StackComment({route}){
             refreshing={isRefreshing}
             onRefresh={onRefresh}/>}
 
-         > 
+         >
+        {stickers==[] && <Text>hold on we are loading some stickers...</Text>}      
          {data!=[] &&data.map((i,item)=>{
              
              return(
@@ -128,6 +151,7 @@ export default function StackComment({route}){
                 </View>
                 <View style={{flexDirection:'column',marginLeft:55,top:-17}}>
                         <Text style={{fontSize:16}}>{data[item].comment}</Text>
+                        {data[item].sticker==true && <Image source={{uri:data[item].sticker_img_url}} style={{height:100,width:100,margin:10}} />}
                 </View>
             </View>
              );
@@ -175,9 +199,29 @@ export default function StackComment({route}){
                 )   
                 }
                 </View>
-                <View style={{margin:5}}>
+                
+                
+            </View>
+            <View style={{margin:5}}>
                     <Text style={{fontSize:16,color:'#23272A'}}>suggested comments</Text>
-                </View>
+                    <ScrollView contentContainerStyle={{flexDirection:'row',flexWrap:'wrap'}}>
+                        {
+                            stickers.map((item)=>{
+                                return(
+                                <View key={item.id.toString()}>
+                                 <TouchableOpacity onPress={()=>{
+                                     Alert.alert(`sticker ${item.label}`,'Post this sticker ?',[
+                                         {text:'cancel'},
+                                         {text:'yes',onPress:()=>{postreq(type_sticker=true,refer_sticker_id=item.id);}}
+                                     ],{cancelable:false})
+                                 }}>
+                                 <Image source={{uri:item.sticker_img_url}} style={{height:100,width:100,margin:10}}/>
+                                 </TouchableOpacity>   
+                                </View>
+                                );
+                            })
+                        }
+                    </ScrollView>
             </View>
         </Modalize>
         </>

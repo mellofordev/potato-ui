@@ -64,7 +64,6 @@ export default function StackComment({route}){
         .then(response=>response.json())
         .then(data=>{
             setBtn(false);
-            console.log(data);
             Alert.alert(data.comments);
             setText('');
             wait(200).then(()=>{

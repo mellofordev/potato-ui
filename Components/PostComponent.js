@@ -13,6 +13,7 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
     const recieved_token=item;
     const [next,setNext]=useState(null);
     const [suggestionBucket,setSuggestionBucket]=useState([]);
+    const [getStartedPop,setGetStartedPop]=useState(false);
     const apirequest =()=>{
         
         fetch(apiUrl,{
@@ -32,7 +33,7 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
             if(data.results.feed){
                     
                 setData(data.results.feed);
-                
+                setGetStartedPop(data.results.user_following);
                 
             }else{
                 
@@ -121,7 +122,30 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
 
     return(
         <View>
-            
+        {getStartedPop==true && 
+        <View>
+            <Text style={{marginLeft:5,fontFamily:'Roboto',fontSize:24,fontWeight:'700'}}>Follow some users</Text>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                        
+                        {suggestionBucket.map((item,k)=>{
+                            return(
+                                
+                                <View key={k} style={{justifyContent:'space-between',margin:5}}>
+                                            <TouchableOpacity onPress={()=>{RootNavigation.push('StackProfile',{username:item.user,t:recieved_token})}}>
+                                            <View style={{flexDirection:'column',backgroundColor:'white',height:150,width:150,marginLeft:5,justifyContent:'center',alignItems:'center',elevation:1,borderRadius:5}}>
+                                            <Image source={{uri:`https://punfuel.pythonanywhere.com/${item.user_profile_pic}`}} style={{borderRadius:8,height:99,width:99}}/>
+                                            <Text style={{fontSize:18,color:blackshade,textAlign:'center'}}>{(item.user).length<=15 ?item.user  :( (item.user).slice(0,10)+'...')}</Text>
+                                            <TouchableOpacity>
+                                            <Text style={{marginLeft:3,color:'#7289DA',textAlign:'center'}}>Follow</Text>
+                                            </TouchableOpacity>
+                                            </View>
+                                            </TouchableOpacity>
+                                </View>
+                            );
+                        })}
+        </ScrollView>
+        </View>
+        }    
         {!isLoading ? <ActivityIndicator size={44} color='#7289DA' style={{marginTop:12}}/> :(
         
         <FlatList
@@ -132,8 +156,8 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
             <View key={item.id.toString()}>
                 <PostCard  item={item} onOpen={onOpen} token={recieved_token}/>
                 {index==2&& 
-                <View>
-                    <Text style={{marginLeft:5,color:'grey',fontSize:20}}>Cool new people</Text>
+                <View style={{backgroundColor:'white'}}>
+                    <Text style={{marginLeft:5,color:blackshade,fontSize:20,fontWeight:'700',fontFamily:'sans-serif-condensed'}}>Cool new people</Text>
                     {suggestionBucket==[] && 
                         
                         <Text>Get started</Text>     

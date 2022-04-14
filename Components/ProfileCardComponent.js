@@ -177,10 +177,10 @@ export default function ProfileCardComponent({setTabRender,tabRender,item,url='h
                             <TouchableOpacity >
                                 <Title style={{color:'black',fontSize:15}}>Post</Title>
                             </TouchableOpacity>
-                            <TouchableOpacity >
+                            <TouchableOpacity onPress={()=>RootNavigation.push('StackTopTabComponent',{routeName:"UserStickerListComponent",username:data.user})} >
                                 <Title style={{color:'gray',fontSize:15}}>Stickers</Title>
                             </TouchableOpacity>
-                            <TouchableOpacity >
+                            <TouchableOpacity onPress={()=>RootNavigation.push('StackTopTabComponent',{routeName:"CommentListComponent",username:data.user})}  >
                                 <Title style={{color:'gray',fontSize:15}}>Comments</Title>
                             </TouchableOpacity>
                             <TouchableOpacity >

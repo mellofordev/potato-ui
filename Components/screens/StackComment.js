@@ -7,7 +7,6 @@ import { Feather } from '@expo/vector-icons';
 import FooterComponent from '../FooterComponent';
 import { FixedBottom } from '../FixedBottomComponent';
 import * as RootNavigation from '../RootNavigation';
-import { FlatList } from 'react-native-gesture-handler';
 export default function StackComment({route}){
     const [isloading,setIsLoading]=useState(false);
     const [error,setError]=useState();

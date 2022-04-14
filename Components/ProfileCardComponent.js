@@ -33,7 +33,7 @@ export default function ProfileCardComponent({setTabRender,tabRender,item,url='h
             setData(res.profile);
             setFollowCount(res.profile.follower_count);
             setFollowingCount(res.profile.following_count);
-            setMutualFriends(res.profile.mutual_friends);  
+            setMutualFriends(res.profile.mutual_friends);
             if(res.update.editprofile!="false"){
                 setIsEdit(true);
 
@@ -142,7 +142,7 @@ export default function ProfileCardComponent({setTabRender,tabRender,item,url='h
                                 }  
                                 <View style={{width:'100%',margin:5}}>
                                 {is_edit_allowed==true ?
-                                <RButton title={'Edit Profile'}   _onpress={()=>RootNavigation.navigate('EditProfile',{bio:data.bio,img:data.user_profile_pic})}/>
+                                <RButton title={'Edit Profile'}   _onpress={()=>RootNavigation.navigate('EditProfile',{bio:data.bio,img:data.user_profile_pic,t:item})}/>
                                 :[
                                     is_follower==false ?<RButton title={loading==false ?'Follow':'Loading...'}   _onpress={()=>{follow();}}/> :(<RButton title={'Following'} color={'#2C2F33'} _onpress={()=>{unfollow();}} />)
                                 ]
@@ -176,6 +176,15 @@ export default function ProfileCardComponent({setTabRender,tabRender,item,url='h
                         <Card.Content style={{flexDirection:'row',justifyContent:'space-between'}}>
                             <TouchableOpacity >
                                 <Title style={{color:'black',fontSize:15}}>Post</Title>
+                            </TouchableOpacity>
+                            <TouchableOpacity >
+                                <Title style={{color:'gray',fontSize:15}}>Stickers</Title>
+                            </TouchableOpacity>
+                            <TouchableOpacity >
+                                <Title style={{color:'gray',fontSize:15}}>Comments</Title>
+                            </TouchableOpacity>
+                            <TouchableOpacity >
+                                <Title style={{color:'gray',fontSize:15}}>nfts</Title>
                             </TouchableOpacity>
                             
                         </Card.Content>

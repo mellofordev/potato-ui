@@ -21,7 +21,7 @@ export default function Home(){
     <>
     <View>
         <Appbar.Header style={{backgroundColor:'#fff',elevation:0}}>
-            <Appbar.Content title={<Image source={{uri:'https://i.ibb.co/SKqmC0Y/maskable-icon.png'}} style={{height:55,width:55,borderRadius:15}}/>} titleStyle={{height:100}}/>
+            <Appbar.Content title={<Image source={{uri:'https://i.ibb.co/GkW382b/punfuelicon.png'}} style={{height:68,width:88,borderRadius:15,marginBottom:13}}/>} titleStyle={{height:100}}/>
             
         </Appbar.Header>   
         <Divider/>

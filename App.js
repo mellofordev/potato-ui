@@ -16,7 +16,7 @@ import FollowComponent from './Components/FollowComponent';
 import FollowStackComponent from './Components/FollowStackComponent';
 import ImageViewer from './Components/StackImageViewer';
 import ForgotPassword from './Components/screens/ForgotPassword';
-
+import SearchStackComponent from './Components/SearchStackComponent';
 const Stack =createStackNavigator();
 
 function App(){
@@ -91,7 +91,8 @@ function App(){
           <Stack.Screen name="EditProfile" component={EditProfile}/>
           <Stack.Screen name="FollowComponent" component={FollowComponent}/>
           <Stack.Screen name="FollowStackComponent" component={FollowStackComponent} options={{headerShown:false}}/>
-          <Stack.Screen name="StackImageViewer" component={ImageViewer} options={{headerTitleStyle:{color:'white'},headerTransparent:true,title:'Image'}} />        
+          <Stack.Screen name="StackImageViewer" component={ImageViewer} options={{headerTitleStyle:{color:'white'},headerTransparent:true,title:'Image',headerTintColor:'#ffff'}} />        
+          <Stack.Screen name="SearchStackComponent" component={SearchStackComponent} options={{headerShown:false}} />
         </Stack.Navigator>)}
     </NavigationContainer>
     </AuthContext.Provider>

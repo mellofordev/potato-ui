@@ -1,11 +1,12 @@
 import React,{useContext, useState} from 'react';
-import {View,StyleSheet,Image,Text,TouchableOpacity, Alert,Dimensions,Linking} from 'react-native';
+import {View,StyleSheet,Image,Text,TouchableOpacity, Alert,Dimensions,Linking, Share} from 'react-native';
 import { EvilIcons } from '@expo/vector-icons';
 import { Ionicons,Octicons } from '@expo/vector-icons';
 import * as RootNavigation from './RootNavigation';
 import ParsedText from 'react-native-parsed-text';
 import {blackshade, blueshade, lightblueshade, whitegreyshade} from './defaultValues';
 import { AuthContext } from './AuthContext';
+
 export default function PostCard({item,onOpen,token,key}){
    
     var uid=item.shareable_link;
@@ -63,6 +64,17 @@ export default function PostCard({item,onOpen,token,key}){
     const Urlpress=(url,matchIndex)=>{
         Linking.openURL(url);
     }
+    
+    const shareOptions = {
+        title: 'punfuel',
+        message: `${item.pic}`, // Note that according to the documentation at least one of "message" or "url" fields is required
+        url: item.pic,
+        filename:item.pic,
+        type:'image/jpeg'
+      };
+    const _share =()=>{
+        Share.share(shareOptions);
+    }  
     return(
      
     <View style={styles.container} key={key}>
@@ -105,14 +117,14 @@ export default function PostCard({item,onOpen,token,key}){
                         <Text style={{color:blueshade,marginTop:3}}>{like_count}</Text>
                     </View>
                     <View style={{flexDirection:'row'}}>
-                        <TouchableOpacity onPress={()=>{RootNavigation.navigate('StackComment',{id:uid,t:gettoken()})}}>
+                        <TouchableOpacity onPress={()=>{RootNavigation.push('StackComment',{id:uid,t:gettoken()})}}>
                         <EvilIcons name="comment" size={34} color={blackshade} />
                         </TouchableOpacity>
                         <Text style={{color:'grey',marginTop:3}}>{item.comment_count}</Text>
                         
                     </View>
                     <View style={{flexDirection:'row'}}>
-                        <TouchableOpacity onPress={()=>{onOpen()}}>
+                        <TouchableOpacity onPress={()=>{_share()}}>
                         <EvilIcons name="share-apple" size={34} color={blackshade} />
                         </TouchableOpacity>
                         <Text style={{color:'grey',marginTop:3}}>1k</Text>

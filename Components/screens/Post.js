@@ -15,6 +15,7 @@ export default function Post(){
     const [loading,setLoading]=useState(false);
     const {gettoken} =useContext(AuthContext);
     const token =gettoken();
+
     useEffect(()=>{
         (async()=>{
             if(Platform.OS!=='web'){

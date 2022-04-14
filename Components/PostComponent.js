@@ -69,6 +69,7 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
         })
         .catch(e=>{
             console.log(e);
+            setError(true);
         })
     } 
     useEffect(()=>{
@@ -196,7 +197,11 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
                 }else{
                     return(
                     <View>
-                        <Text style={{textAlign:'center'}}>.</Text>
+                        <View style={{textAlign:'center'}}>{error==false ?<Text>.</Text> :(<View>
+                            <Text>Network error</Text>
+                            <TouchableOpacity onPress={onRefresh}><Text>Retry</Text></TouchableOpacity>
+                            </View>)}
+                        </View>
                     </View>
                     );
                 }

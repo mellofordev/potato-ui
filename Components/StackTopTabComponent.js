@@ -1,5 +1,4 @@
 import React from 'react';
-import {View,Text} from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import UserStickerComponent from './UserStickerComponent';
 import CommentListComponent from './CommentListComponent';
@@ -20,14 +19,14 @@ export default function StackTopTabComponent({navigation,route}){
               tabBarLabelStyle:{
                   fontStyle:'normal',fontFamily:'Roboto'
               },
-              tabBarInactiveTintColor:grayshadeprimary,
+              tabBarInactiveTintColor:'gray',
               tabBarActiveTintColor:blackshade,
               tabBarIndicatorStyle:{backgroundColor:blackshade}
 
             }}
         >
-            <Tab.Screen name="UserStickerListComponent" component={UserStickerComponent} options={{tabBarLabel:'stickers'}}/>
-            <Tab.Screen name="CommentListComponent" component={CommentListComponent} options={{tabBarLabel:'comments'}}/>
+            <Tab.Screen name="UserStickerListComponent" component={UserStickerComponent} initialParams={{username:route.params.username}} options={{tabBarLabel:'stickers'}}/>
+            <Tab.Screen name="CommentListComponent" component={CommentListComponent} initialParams={{username:route.params.username}} options={{tabBarLabel:'comments'}}/>
         </Tab.Navigator>
         </>
     );

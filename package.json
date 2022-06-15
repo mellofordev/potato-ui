@@ -25,7 +25,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-modalize": "^2.0.8",
-    "react-native-pager-view": "^5.4.15",
+    "react-native-pager-view": "5.0.12",
     "react-native-paper": "^4.9.1",
     "react-native-parsed-text": "0.0.22",
     "react-native-reanimated": "~2.1.0",

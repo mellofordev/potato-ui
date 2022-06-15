@@ -9,7 +9,6 @@ export default function SearchStackComponent({navigation}){
     const [loading,setLoading]=useState(true);
     const [userinput,setUserInput] =useState();
     const {gettoken} =useContext(AuthContext);
-    const [initialrender,setInitialRender]=useState(true);
     const apireq =()=>{
         fetch(`https://punfuel.pythonanywhere.com/api/search?search=${userinput}`,{
             method:'GET',
@@ -23,7 +22,7 @@ export default function SearchStackComponent({navigation}){
         .then(data=>{
             setData(data);
             setLoading(false);
-            setInitialRender(false);
+            
         })
         .catch(e=>{
             console.log(e);
@@ -49,7 +48,7 @@ export default function SearchStackComponent({navigation}){
               return(
                 <View>
                     <Card>
-                        {loading==true ? <ActivityIndicator size={24}/> :(
+                        {loading==true ? <Text>loading...</Text> :(
                             <TouchableOpacity style={styles.profilecard} onPress={()=>{RootNavigation.push('StackProfile',{username:item.user,t:gettoken()})}}>
                             <Image source={{uri:`https://punfuel.pythonanywhere.com/${item.user_profile_pic}`}} style={styles.profilepic}/>
                             <Text style={styles.profiletext}>{item.user}</Text>

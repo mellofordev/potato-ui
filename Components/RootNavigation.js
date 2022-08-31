@@ -9,5 +9,8 @@ export function navigate(name,params){
 export function push(name,params){
     navigationRef.current?.dispatch(StackActions.push(name,params));
 }
+export function back(name){
+    navigationRef.current?.dispatch(StackActions.pop(name))
+}
 
     

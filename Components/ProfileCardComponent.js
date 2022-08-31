@@ -175,13 +175,13 @@ export default function ProfileCardComponent({setTabRender,tabRender,item,url='h
                     <Card style={{marginTop:5,marginBottom:3}}>
                         <Card.Content style={{flexDirection:'row',justifyContent:'space-between'}}>
                             <TouchableOpacity >
-                                <Title style={{color:'black',fontSize:15}}>Post</Title>
+                                <Title style={{color:'black',fontSize:15}}>post</Title>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={()=>RootNavigation.push('StackTopTabComponent',{routeName:"UserStickerListComponent",username:data.user})} >
-                                <Title style={{color:'gray',fontSize:15}}>Stickers</Title>
+                                <Title style={{color:'gray',fontSize:15}}>stickers</Title>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={()=>RootNavigation.push('StackTopTabComponent',{routeName:"CommentListComponent",username:data.user})}  >
-                                <Title style={{color:'gray',fontSize:15}}>Comments</Title>
+                                <Title style={{color:'gray',fontSize:15}}>comments</Title>
                             </TouchableOpacity>
                             <TouchableOpacity >
                                 <Title style={{color:'gray',fontSize:15}}>nfts</Title>

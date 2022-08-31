@@ -18,6 +18,7 @@ import ImageViewer from './Components/StackImageViewer';
 import ForgotPassword from './Components/screens/ForgotPassword';
 import SearchStackComponent from './Components/SearchStackComponent';
 import StackTopTabComponent from './Components/StackTopTabComponent';
+import Post from './Components/screens/Post';
 const Stack =createStackNavigator();
 
 function App(){
@@ -95,6 +96,7 @@ function App(){
           <Stack.Screen name="StackImageViewer" component={ImageViewer} options={{headerTitleStyle:{color:'white'},headerTransparent:true,title:'Image',headerTintColor:'#ffff'}} />        
           <Stack.Screen name="SearchStackComponent" component={SearchStackComponent} options={{headerShown:false}} />
           <Stack.Screen name="StackTopTabComponent" component={StackTopTabComponent} options={{headerShown:false}}/>
+          <Stack.Screen name="StackPostScreen" component={Post} options={{title:'Post',headerStyle:{elevation:0}}}/>
         </Stack.Navigator>)}
     </NavigationContainer>
     </AuthContext.Provider>

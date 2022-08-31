@@ -8,6 +8,7 @@ import Notification from './screens/Notification';
 import Profile from './screens/Profile';
 import Post from './screens/Post';
 import { AuthContext } from './AuthContext';
+import * as Rootnavigation from './RootNavigation';
 const Tabs =createBottomTabNavigator();
 
 export default function MainComponent(){
@@ -75,7 +76,14 @@ export default function MainComponent(){
             },
 
          }} />
-         <Tabs.Screen component={Post} name="Post" options={{
+         <Tabs.Screen 
+         component={Post}
+         listeners={()=>({
+          tabPress:(e)=>{
+            e.preventDefault();
+            Rootnavigation.push("StackPostScreen");
+          }
+         })} name="Post" options={{
              tabBarIcon:({focused})=>{
                  return(
                     <View style={{position:'absolute',top:15}}>

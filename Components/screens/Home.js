@@ -21,7 +21,7 @@ export default function Home(){
     <>
     <View>
         <Appbar.Header style={{backgroundColor:'#fff',elevation:0}}>
-            <Appbar.Content title={<Image source={{uri:'https://i.ibb.co/GkW382b/punfuelicon.png'}} style={{height:68,width:88,borderRadius:15,marginBottom:13}}/>} titleStyle={{height:100}}/>
+            <Appbar.Content title={<Image source={{uri:'https://i.ibb.co/GkW382b/punfuelicon.png'}} style={{height:68,width:88,marginBottom:13}}/>} titleStyle={{height:110}}/>
             
         </Appbar.Header>   
         <Divider/>
@@ -39,7 +39,7 @@ export default function Home(){
          topheader={()=>{
              return(
                 <View style={{flexDirection:'column',flex:1,marginLeft:3}}>
-                  <Title>Feed.</Title>
+                  <Title style={{marginLeft:5,fontWeight:'900'}}>Feed</Title>
                 </View>
              );
          }}

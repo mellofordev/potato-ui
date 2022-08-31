@@ -176,7 +176,7 @@ export default function StackComment({route}){
                 <View >
                 {btn==false ?
                 <View style={{flexDirection:'row'}}>
-                <TextInput label='Write your comment' value={text} onChangeText={text=>setText(text)} style={{width:'90%',color:'#fff',marginLeft:5}}/>
+                <TextInput label='Write your comment' value={text} onChangeText={text=>setText(text)} style={{width:'90%',color:'#fff',marginLeft:5,borderRadius:10,backgroundColor:'white'}}/>
                 <TouchableOpacity style={{margin:5,justifyContent:'center',alignItems:'center'}} 
                 onPress={()=>{
                     if(text==''){

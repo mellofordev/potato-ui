@@ -1,4 +1,4 @@
-import React, { useState,useEffect, useContext } from 'react';
+import React, { useState,useEffect, useContext, useRef } from 'react';
 import {View,Text,TextInput,Image,StyleSheet,Dimensions, TouchableOpacity,Platform,Alert} from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import RButton from '../RButtonComponent';
@@ -7,6 +7,7 @@ import {Divider} from 'react-native-paper';
 import { AuthContext } from '../AuthContext';
 import { MaterialIcons } from '@expo/vector-icons';
 import { blackshade, whitegreyshade } from '../defaultValues';
+import { Video } from 'expo-av';
 const width=Dimensions.get("window").width;
 export default function Post(){
     const [image,setImage]=useState(null);
@@ -15,7 +16,8 @@ export default function Post(){
     const [loading,setLoading]=useState(false);
     const {gettoken} =useContext(AuthContext);
     const token =gettoken();
-
+    const video =useRef(null);
+    
     useEffect(()=>{
         (async()=>{
             if(Platform.OS!=='web'){
@@ -37,7 +39,7 @@ export default function Post(){
     })  
       const pickCamera= async()=>{
           let result=await ImagePicker.launchCameraAsync({
-              mediaTypes:ImagePicker.MediaTypeOptions.Images,
+              mediaTypes:ImagePicker.MediaTypeOptions.All,
               allowsEditing:true,
               quality:1
           });
@@ -48,9 +50,11 @@ export default function Post(){
       }
       const pickImage= async()=>{
         let result=await ImagePicker.launchImageLibraryAsync({
-            mediaTypes:ImagePicker.MediaTypeOptions.Images,
+            mediaTypes:ImagePicker.MediaTypeOptions.All,
             allowsEditing:true,
-            quality:1
+            quality:1,
+            videoQuality:1,
+            videoMaxDuration:1000
         });
      
         if(!result.cancelled){
@@ -68,11 +72,13 @@ export default function Post(){
           if(image!=null){
           var imgname=image.split('/').pop();
           var imgType=imgname.split('.').pop();
+          console.log(imgType);
           formdata.append('pic',{
             uri:image,
             name:imgname,
-            type:'image/'+imgType,
+            type:(imgType!='mp4'?'image/'+imgType:'video/'+imgType),
           });
+          imgType=='mp4'?formdata.append('video',true):formdata.append('video',false)
           }else{
               formdata.append('pic','');
           }
@@ -108,7 +114,7 @@ export default function Post(){
            <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',marginBottom:5}}>
                
                 <Image source={{uri:'https://punfuel.pythonanywhere.com/media/default.png/'}} style={styles.userimg}/>
-                <TextInput multiline={true} numberOfLines={3} placeholder={' place to write...'} value={text} onChangeText={(text)=>setText(text)} style={styles.input}/>
+                <TextInput multiline={true} numberOfLines={3} placeholder={' Add a Title'} value={text} onChangeText={(text)=>setText(text)} style={styles.input}/>
                   
            </View> 
            
@@ -133,7 +139,22 @@ export default function Post(){
            </View>
            <Divider/>
               <View style={{margin:5}}>
-               <Image source={{uri:image}} style={{justifyContent:'center',alignItems:'center',height:'75%',borderRadius:9,resizeMode:'contain'}}/>
+                {
+                  
+                  image!=null && 
+                  (image.split('.').pop()=='mp4'?(
+                    <Video
+                    source={{uri:image}}
+                    useNativeControls
+                    isLooping
+                    style={{justifyContent:'center',alignItems:'center',height:'75%',borderRadius:9,backgroundColor:'black'}}
+                    resizeMode='contain'
+                    ref={video}
+                    />
+                  ):<Image source={{uri:image}} style={{justifyContent:'center',alignItems:'center',height:'75%',borderRadius:9,resizeMode:'contain'}}/>
+                )
+                }
+               
            
               
               </View>

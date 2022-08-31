@@ -1,17 +1,17 @@
-import React,{useState,useEffect,useCallback,useContext } from 'react';
+import React,{useState,useEffect,useCallback} from 'react';
 import {View, ActivityIndicator, RefreshControl,Alert,FlatList,Text,ScrollView,StyleSheet,Image,TouchableOpacity} from 'react-native';
 import PostCard from './PostCardComponent';
 import FooterComponent from './FooterComponent';
-import { blackshade, whitegreyshade } from './defaultValues';
+import { blackshade} from './defaultValues';
 import * as RootNavigation from './RootNavigation';
-import { Title } from 'react-native-paper';
+
 export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item}){
     const [isLoading,setIsLoading]=useState(false);
     const [data,setData]=useState([]);
     const [error,setError]=useState(false);
     const [isRefreshing,setIsRefreshing]=useState(false);
     const recieved_token=item;
-    const [next,setNext]=useState(null);
+    const [next,setNext]=useState('');
     const [suggestionBucket,setSuggestionBucket]=useState([]);
     const [getStartedPop,setGetStartedPop]=useState(false);
     const apirequest =()=>{
@@ -215,8 +215,7 @@ export default function PostComponent({apiUrl,topheader,issticky=0,onOpen,item})
             ListHeaderComponent={topheader()}
             stickyHeaderIndices={[0.1]}
             onEndReached={()=>{
-        
-                fetchmore();
+                next!=null && fetchmore();
             
                 
                 

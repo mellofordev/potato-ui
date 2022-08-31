@@ -1,12 +1,12 @@
-import React,{useContext, useState} from 'react';
-import {View,StyleSheet,Image,Text,TouchableOpacity, Alert,Dimensions,Linking, Share} from 'react-native';
+import React,{useContext, useRef, useState} from 'react';
+import {View,StyleSheet,Image,Text,TouchableOpacity, Alert,Button,Linking, Share} from 'react-native';
 import { EvilIcons } from '@expo/vector-icons';
 import { Ionicons,Octicons } from '@expo/vector-icons';
 import * as RootNavigation from './RootNavigation';
 import ParsedText from 'react-native-parsed-text';
 import {blackshade, blueshade, lightblueshade, whitegreyshade} from './defaultValues';
 import { AuthContext } from './AuthContext';
-
+import VideoCardComponent from './VideoCardComponent';
 export default function PostCard({item,onOpen,token,key}){
    
     var uid=item.shareable_link;
@@ -16,6 +16,7 @@ export default function PostCard({item,onOpen,token,key}){
     const {gettoken} =useContext(AuthContext);
     const received_token =gettoken();
     const likedby=item.fresh_likes.likes;
+    
     const onLike =()=>{
         if(like==false){
             setLike(true);
@@ -67,7 +68,7 @@ export default function PostCard({item,onOpen,token,key}){
     
     const shareOptions = {
         title: 'punfuel',
-        message: `${item.pic}`, // Note that according to the documentation at least one of "message" or "url" fields is required
+        message: `${item.pic!=null?item.pic:item.post}`, // Note that according to the documentation at least one of "message" or "url" fields is required
         url: item.pic,
         filename:item.pic,
         type:'image/jpeg'
@@ -86,7 +87,7 @@ export default function PostCard({item,onOpen,token,key}){
                 <Image source={{uri:'https://punfuel.pythonanywhere.com'+item.user_profile_pic}} style={{borderRadius:15,height:55,width:55,borderColor:'#fffaf0',borderWidth:1}}  />
                 </TouchableOpacity>
                 <View style={styles.postNameContainer}>
-                    <Text style={{fontSize:19,marginLeft:15}}>@{item.user}</Text>
+                    <Text style={{fontSize:19,marginLeft:15,fontWeight:'500'}}>@{item.user}</Text>
                     { item.verified==true &&
                         <Octicons name="verified" size={17} style={{width:17,height:17,marginLeft:5,marginTop:7}} color={lightblueshade} />
                           
@@ -100,10 +101,18 @@ export default function PostCard({item,onOpen,token,key}){
                     {type:'url',style:styles.parsedurl,onPress:Urlpress},
                     {pattern: /@(?=.{3,20}(?:\s|$))[a-z][a-z0-9]+(?:[._][a-z0-9]+)?/ig, style: styles.mentiontextusername, onPress:Usernamepress, renderText:renderText},
                 ]}>{item.post}</ParsedText>
-                { item.pic!=null &&
+                {(item.pic!=null) &&[
+                   (item.video==false)? 
                    <TouchableOpacity onPress={()=>RootNavigation.push('StackImageViewer',{img:item.pic})}>
-                        <Image source={{uri:item.pic}}  style={{resizeMode:'center',width:'100%',height:undefined,aspectRatio:1,borderRadius:15,marginTop:3,backgroundColor:whitegreyshade}}/>
+                        <Image source={{uri:item.pic}}  style={{resizeMode:'cover',width:'100%',height:undefined,aspectRatio:1,borderRadius:15,marginTop:3,backgroundColor:whitegreyshade}}/>
                     </TouchableOpacity>
+                    :(
+                        <>
+                             <VideoCardComponent videouri={item.pic}/>
+                                
+                        </>
+                    )
+                ]
                 }
                 <View style={styles.postIcons}>
                     <View style={{flexDirection:'row'}}>
@@ -127,7 +136,7 @@ export default function PostCard({item,onOpen,token,key}){
                         <TouchableOpacity onPress={()=>{_share()}}>
                         <EvilIcons name="share-apple" size={34} color={blackshade} />
                         </TouchableOpacity>
-                        <Text style={{color:'grey',marginTop:3}}>1k</Text>
+                        <Text style={{color:'grey',marginTop:3}}>share</Text>
                     </View>
                 </View>
                 {likedby!=[] &&

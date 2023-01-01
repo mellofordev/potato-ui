@@ -3,7 +3,8 @@ import {View,Text,StyleSheet,FlatList,Image,ActivityIndicator} from 'react-nativ
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import {Appbar,Card,Searchbar } from 'react-native-paper';
 import { AuthContext } from './AuthContext';
-import * as RootNavigation from './RootNavigation';
+
+import SearchListComponent from './SearchListComponent';
 export default function SearchStackComponent({navigation}){
     const [Data,setData] =useState([]);
     const [loading,setLoading]=useState(true);
@@ -40,27 +41,7 @@ export default function SearchStackComponent({navigation}){
                <Appbar.Content title={<Searchbar onChangeText={(userinput)=>setUserInput(userinput)} value={userinput} placeholder='Search memers' style={{marginBottom:3,borderRadius:10,width:300}} />}/>
               <Appbar.Action icon={'close'} onPress={()=>{navigation.goBack();}}/>
            </Appbar.Header>
-           <FlatList
-           data={Data}
-           keyExtractor={(item)=>{item.id.toString()}}
-           
-           renderItem={({item})=>{
-              return(
-                <View>
-                    <Card>
-                        {loading==true ? <Text>loading...</Text> :(
-                            <TouchableOpacity style={styles.profilecard} onPress={()=>{RootNavigation.push('StackProfile',{username:item.user,t:gettoken()})}}>
-                            <Image source={{uri:`https://punfuel.pythonanywhere.com/${item.user_profile_pic}`}} style={styles.profilepic}/>
-                            <Text style={styles.profiletext}>{item.user}</Text>
-                
-                        </TouchableOpacity>
-                        )}
-                    </Card>
-                    
-                </View>
-              );
-           }}
-           />
+           <SearchListComponent props={Data} loading={loading} token={gettoken()}/>
         </View>
     );
 }

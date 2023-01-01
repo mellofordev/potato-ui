@@ -47,16 +47,11 @@ export default function MainComponent(){
         }}
         >
          <Tabs.Screen component={Home} name="Home" options={{
+            
              tabBarIcon:({focused})=>{
                  return(
                     <View style={{position:'absolute',top:15}}>
-                      {notificationCount==0?<Feather name="home" size={24} color={focused?'black':'grey'} />:(
-                        <View>
-                           <Feather name="home" size={24} color={focused?'black':'grey'} />
-                           <Text style={{borderRadius:8,backgroundColor:'red',color:'white',top:-35,width:20,height:20,textAlign:'center',fontWeight:'500',left:230,elevation:3}}>{notificationCount}</Text>
-                          
-                        </View>  
-                      )}
+                        <Feather name="home" size={24} color={focused?'black':'grey'} />  
                     </View>
                  );
                  
@@ -96,6 +91,8 @@ export default function MainComponent(){
 
          }} />
          <Tabs.Screen component={Notification} name="Activity" options={{
+             tabBarBadge:notificationCount,
+             tabBarBadgeStyle:notificationCount==0?{display:'none'}:{display:'flex'},
              tabBarIcon:({focused})=>{
                  return(
                     <View style={{position:'absolute',top:15}}>

@@ -1,7 +1,6 @@
-import React,{useContext, useRef, useState} from 'react';
+import React,{useContext, useState} from 'react';
 import {View,StyleSheet,Image,Text,TouchableOpacity, Alert,Button,Linking, Share} from 'react-native';
-import { EvilIcons } from '@expo/vector-icons';
-import { Ionicons,Octicons } from '@expo/vector-icons';
+import { EvilIcons,MaterialCommunityIcons,Ionicons,Octicons} from '@expo/vector-icons';
 import * as RootNavigation from './RootNavigation';
 import ParsedText from 'react-native-parsed-text';
 import {blackshade, blueshade, lightblueshade, whitegreyshade} from './defaultValues';
@@ -88,10 +87,15 @@ export default function PostCard({item,onOpen,token,key}){
                 </TouchableOpacity>
                 <View style={styles.postNameContainer}>
                     <Text style={{fontSize:19,marginLeft:15,fontWeight:'500'}}>@{item.user}</Text>
+                    
                     { item.verified==true &&
                         <Octicons name="verified" size={17} style={{width:17,height:17,marginLeft:5,marginTop:7}} color={lightblueshade} />
                           
                     }
+                    <View style={{flexDirection:'row',marginLeft:5,top:5}}>
+                        <MaterialCommunityIcons name='robot-outline' size={19} color={"gray"}/>
+                        <Text style={{color:'gray',margin:2,fontWeight:'600'}}>bot</Text>
+                    </View>
                 </View>
                 
             </View>
